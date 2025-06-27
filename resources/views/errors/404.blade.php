@@ -1,0 +1,55 @@
+@extends('dashboard.admin.layout.apps')
+@section('body')
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main id="content" role="main" class="main">
+    <!-- Content -->
+    <div class="container">
+      <a class="position-absolute top-0 start-0 end-0 py-4" href="index.html">
+        <img class="avatar avatar-xl avatar-4x3 avatar-centered" src="assets/svg/logos/logo.svg" alt="Image Description" data-hs-theme-appearance="default">
+        <img class="avatar avatar-xl avatar-4x3 avatar-centered" src="assets/svg/logos-light/logo.svg" alt="Image Description" data-hs-theme-appearance="dark">
+      </a>
+
+      <div class="footer-height-offset d-flex justify-content-center align-items-center flex-column">
+        <div class="row justify-content-center align-items-sm-center w-100">
+          <div class="col-9 col-sm-6 col-lg-4">
+            <div class="text-center text-sm-end me-sm-4 mb-5 mb-sm-0">
+              <img class="img-fluid" src="assets/svg/illustrations/oc-thinking.svg" alt="Image Description" data-hs-theme-appearance="default">
+              <img class="img-fluid" src="assets/svg/illustrations-light/oc-thinking.svg" alt="Image Description" data-hs-theme-appearance="dark">
+            </div>
+          </div>
+          <!-- End Col -->
+
+          <div class="col-sm-6 col-lg-4 text-center text-sm-start">
+            <h1 class="display-1 mb-0">500</h1>
+            <p class="lead">The server encountered an internal error or misconfiguration and was unable to complete your request.</p>
+            <a class="btn btn-primary" href="error-500.html">Reload page</a>
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+      </div>
+    </div>
+    <!-- End Content -->
+
+    <!-- Footer -->
+    <div class="footer text-center">
+      <ul class="list-inline list-separator">
+        <li class="list-inline-item">
+          <a class="list-separator-link" href="#">Front Support</a>
+        </li>
+
+        <li class="list-inline-item">
+          <a class="list-separator-link" href="#">Front Status</a>
+        </li>
+
+        <li class="list-inline-item">
+          <a class="list-separator-link" href="#">Get Help</a>
+        </li>
+      </ul>
+    </div>
+    <!-- End Footer -->
+  </main>
+  <!-- ========== END MAIN CONTENT ========== -->
+
+@endsection

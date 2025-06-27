@@ -1,0 +1,23 @@
+.active{
+  color: #00af43 !important;
+}
+
+.btn-primary{
+  background: #00af43 !important;
+}
+
+.font-remise{
+  font-size: 10px;
+}
+
+.table-responsive
+{
+  overflow: unset !important;
+  overflow-x: unset !important;
+  overflow-y: unset !important;
+}
+
+.card-table
+{
+  overflow: auto;
+}
