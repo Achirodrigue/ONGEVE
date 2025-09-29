@@ -60,9 +60,17 @@ return [
             'driver' => 'session',
             'provider' => 'magasiniers',
         ],
-        'logistique' => [
+        'geststock' => [
             'driver' => 'session',
-            'provider' => 'logistiques',
+            'provider' => 'geststocks',
+        ],
+        'packauto' => [
+            'driver' => 'session',
+            'provider' => 'packautos',
+        ],
+        'secretaire' => [
+            'driver' => 'session',
+            'provider' => 'secretaires',
         ],
     ],
 
@@ -108,9 +116,17 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\Magasinier::class,
         ],
-        'logistiques' => [
+        'geststocks' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Logistique::class,
+            'model' => App\Models\Rgeststock::class,
+        ],
+        'packautos' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Rpackauto::class,
+        ],
+        'secretaires' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Secretaire::class,
         ],
 
         // 'users' => [
@@ -175,8 +191,20 @@ return [
             'expire' => 60,
             'throttle' => 60,
         ],
-        'logistiques' => [
-            'provider' => 'logistiques',
+        'geststocks' => [
+            'provider' => 'geststocks',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'packautos' => [
+            'provider' => 'packautos',
+            'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'secretaires' => [
+            'provider' => 'secretaires',
             'table' => 'password_resets',
             'expire' => 60,
             'throttle' => 60,

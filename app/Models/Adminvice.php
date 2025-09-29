@@ -17,7 +17,9 @@ class Adminvice extends Authenticatable
         'contact',
         'email',
         'isvalide',
+        'statut',
         'photo',
+        'connexion',
         'identifiant',
         'password',
     ];

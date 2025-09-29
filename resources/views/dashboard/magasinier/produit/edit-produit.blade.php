@@ -69,7 +69,7 @@
                     <div class="col-md-6">
                       <div class="mb-4">
                         <label for="qtyStock" class="form-label">Quantité du produit</label>
-                        <input type="number" min="{{ $produit->qtyStock }}" class="form-control" name="qtyStock" value="{{ $produit->qtyStock }}" id="qtyStock" placeholder="Entrer la quantité en stock" required aria-label="eg. 348121032">
+                        <input type="number" class="form-control" value="{{ $produit->qtyStock }}" id="qtyStock" placeholder="Entrer la quantité en stock" readonly>
                         @error('qtyStock') <span class="text-danger"> {{ $message }} </span> @enderror
                       </div>
                     </div>
@@ -114,6 +114,27 @@
                             @foreach(categories()->where('id','!=',$produit->categorie->id) as $categorie)
                               <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
                             @endforeach
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                      <div class="mb-4">
+                        <label for="categoryLabel" class="form-label">Type de produit</label>
+                        <div class="tom-select-custom">
+                          <select name="categorie" class="js-select form-select" autocomplete="off" id="categoryLabel" data-hs-tom-select-options='{
+                                    "searchInDropdown": false,
+                                    "hideSearch": true,
+                                    "placeholder": "Select category"
+                                  }' required>
+                            @if($produit->TP)
+                              <option value="1">Prestation de service</option>
+                              <option value="0">Vente</option>
+                            @else
+                              <option value="0">Vente</option>
+                              <option value="1">Prestation de service</option>
+                            @endif
                           </select>
                         </div>
                       </div>

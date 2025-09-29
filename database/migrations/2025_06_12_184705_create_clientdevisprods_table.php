@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('clientdevisprods', function (Blueprint $table) {
             $table->id();
             $table->string('quantite');
+            $table->string('nbre_jour')->nullable();
             $table->string('prix_unitaire');
             $table->string('prix_total');
             $table->foreignId('clientdevis_id')->constrained()->onDelete('cascade');

@@ -15,11 +15,11 @@
           </div>
           <!-- End Col -->
 
-          <div class="col-auto">
+          <!-- <div class="col-auto">
             <a class="btn btn-primary" href="{{ route('magasinier.produit.create') }}">
               <i class="bi-person-plus-fill me-1"></i> Ajouter
             </a>
-          </div>
+          </div> -->
           <!-- End Col -->
         </div>
         <!-- End Row -->
@@ -81,8 +81,9 @@
                     <th>Prix unitaire</th>
                     <th>Quantités en stock</th>
                     <th>Référence</th>
+                    <th>Type de produit</th>
                     <th>Entrepôt</th>
-                    <th>Actions</th>
+                    <!-- <th>Actions</th> -->
                   </tr>
                 </thead>
 
@@ -99,18 +100,29 @@
                         <h5 class="text-inherit mb-0">{{ $produit->nom }}</h5>
                       </td>
                       <td class="fw-bold">@if($produit->description) {{ $produit->description }} @else Aucune description @endif</td>
-                      <td class="fw-bold">{{ getprice($produit->prix) }}</td>
-                      <td class="text-warning">{{ $produit->qtyStock }} (en stock)</td>
+                      <td class="fw-bold">{{ getpricefr($produit->prix) }}</td>
+                      @php 
+                        $qtyC = 0;
+                        foreach($produit->clientdevisprods as $clientdevisprod)
+                        {
+                          if($clientdevisprod->clientdevis->clientdevisinfo->isvalide && !$clientdevisprod->clientdevis->clientdevisinfo->livraison)
+                          {
+                            $qtyC += $clientdevisprod->quantite;
+                          }
+                        }
+                      @endphp
+                      <td class="text-warning">{{ $produit->qtyStock }} @if($qtyC > 0) ({{ $qtyC }} en commande) @endif</td>
                       <td class="text-warning">{{ $produit->reference }}</td>
+                      <td class="fw-bold">@if($produit->TP) Prestation de service @else Vente @endif</td>
                       <td class="fw-bold">{{ $produit->categorie->nom }}</td>
-                      <td>
+                      <!-- <td>
                         <div class="btn-group" role="group">
                           <a class="btn btn-white btn-sm" href="{{ route('magasinier.produit.edit', $produit) }}">
                             <i class="bi-pencil-fill me-1"></i>
                           </a>
                           <a class="btn btn-white btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#deleteProduit{{ $produit->id }}">
                             <i class="bi-trash me-1"></i>
-                          </a>
+                          </a> -->
 
                           <!-- Button Group -->
                           <!-- <div class="btn-group">
@@ -132,8 +144,8 @@
                             </div>
                           </div> -->
                           <!-- End Button Group -->
-                        </div>
-                      </td>
+                        <!-- </div>
+                      </td> -->
                     </tr>
                     @include('include.produit.produit')
                   @endforeach

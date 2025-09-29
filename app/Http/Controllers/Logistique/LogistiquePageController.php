@@ -25,6 +25,13 @@ class LogistiquePageController extends Controller
 
         return view('dashboard.logistique.home');
     }
+
+    //projet   
+        public function projet()
+        { 
+            return  view('dashboard.logistique.projet.projet');
+        }
+    //
     
     public function validerLivraisonCommandeStore(Request $request, Commandelivreur $commandelivreur)
     {

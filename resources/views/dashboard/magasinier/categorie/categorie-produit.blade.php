@@ -80,6 +80,7 @@
                     <th>Description</th>
                     <th>Prix unitaire</th>
                     <th>Quantités en stock</th>
+                    <th>Type de produit</th>
                     <th>Référence</th>
                     <th>Catégorie</th>
                     <th>Actions</th>
@@ -101,6 +102,7 @@
                       <td class="fw-bold">@if($produit->description) {{ $produit->description }} @else Aucune description @endif</td>
                       <td class="fw-bold">{{ getprice($produit->prix) }}</td>
                       <td class="text-warning">{{ $produit->qtyStock }} (en stock)</td>
+                      <td class="fw-bold">@if($produit->TP) Prestation de service @else Vente @endif</td>
                       <td class="text-warning">{{ $produit->reference }}</td>
                       <td class="fw-bold">{{ $produit->categorie->nom }}</td>
                       <td>

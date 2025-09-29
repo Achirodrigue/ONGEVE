@@ -12,6 +12,7 @@ class Clientdevisprod extends Model
     protected $fillable = [
         'quantite',
         'prix_unitaire',
+        'nbre_jour',
         'prix_total',
         'clientdevis_id',
         'produit_id',
@@ -22,12 +23,21 @@ class Clientdevisprod extends Model
         {
             return $this->belongsTo('App\Models\Clientdevis');
         }
+        
+        public function clientdevisavoirprod()
+        {
+            return $this->hasOne('App\Models\Clientdevisavoirprod');
+        }
     //
 
     //produit devis
         public function produit()
         {
             return $this->belongsTo('App\Models\Produit');
+        }
+        public function produitvendu()
+        {
+            return $this->hasOne('App\Models\Produitvendu');
         }
     //
 

@@ -52,6 +52,11 @@
             <li class="nav-item">
               <a class="nav-link active" href="#">Tout les clients</a>
             </li>
+            <!-- @if(auth()->user()->role)
+              <li class="nav-item">
+                <a class="nav-link active" href="#">Mes clients</a>
+              </li>
+            @endif -->
           </ul>
           <!-- End Nav -->
         </div>
@@ -60,7 +65,7 @@
       <!-- End Page Header -->
 
       <!-- Card -->
-      <div class="card">
+      <div class="card card-table">
           @if($clients->count() > 0)
             <!-- Header -->
             <div class="card-header card-header-content-md-between">
@@ -107,19 +112,21 @@
                     <th>Adresse postale</th>
                     <th>Infos client</th>
                     <!-- <th>Commercial</th> -->
-                    <th>Action</th>
-                    
+                    @if(auth()->user()->role)
+                      <th>Action</th>
+                    @endif
                   </tr>
                 </thead>
 
                 <tbody>
                   @foreach($clients as $client)
-                    <tr>
+                    <tr>  
                       <td class="fw-bold">{{ $client->nom }}</td>
-                      <td class="fw-bold">{{ $client->email }}</td>
+                      <td class="fw-bold">@if($client->email) {{ $client->email }} @else Aucun @endif</td>                
                       <td class="fw-bold">{{ $client->contact }}</td>
                       <td class="fw-bold">{{ getprice($client->Pachat) }}</td>
-                      <td class="fw-bold">{{ $client->adresse_postale }}</td>                
+                      <td class="fw-bold">@if($client->adresse_postale) {{ $client->adresse_postale }} @else Aucune @endif</td>                
+                                    
                       <!-- <td class="fw-bold">{{ auth()->user()->nom }}</td>                 -->
                       <td>
                         <div class="btn-group" role="group">
@@ -128,19 +135,21 @@
                           </a>
                         </div>
                       </td>
-                      <td>
-                        <div class="btn-group" role="group">
-                          <a class="btn btn-white btn-sm" href="{{ route('commercial.client.edit', $client) }}">
-                            <i class="bi-pencil-fill me-1"></i>
-                          </a>
-                          <a class="btn btn-white btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#deleteClient{{ $client->id }}">
-                            <i class="bi-trash dropdown-item-icon"></i>
-                          </a>
-                          <!-- End Button Group -->
-                        </div>
-                      </td>
+                      @if(auth()->user()->role)
+                        <td>
+                          <div class="btn-group" role="group">
+                            <a class="btn btn-white btn-sm" href="{{ route('commercial.client.edit', $client) }}">
+                              <i class="bi-pencil-fill me-1"></i>
+                            </a>
+                            <a class="btn btn-white btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#deleteClient{{ $client->id }}">
+                              <i class="bi-trash dropdown-item-icon"></i>
+                            </a>
+                            <!-- End Button Group -->
+                          </div>
+                        </td>
+                      @endif
                     </tr>
-                    @include('include.client')
+                    @include('include.commun.client.client')
                   @endforeach
                 </tbody>
               </table>

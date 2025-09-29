@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'fne' => [
+        'base_url' => env('FNE_BASE_URL'),
+        'token' => env('FNE_TOKEN'),
+    ],
+
 ];

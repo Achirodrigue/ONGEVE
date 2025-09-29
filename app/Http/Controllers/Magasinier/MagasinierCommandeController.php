@@ -42,9 +42,13 @@ class MagasinierCommandeController extends Controller
         }
     //
 
-    //particulier
-        public function commandeParticulierValide()
+    //client all facture
+        public function allFactureClient()
         {
+            $clientdevis = Clientdevis::whereHas('clientdevisinfo', function ($query) {
+                $query->where('isvalide', 1)->where('etat', 1)->where('livraison', 1);
+            })->orderBy('updated_at','desc')->get();
+
             $particulierdevis = Particulierdevis::where('isvalide', 1)->where('etat', 1)->where('livraison', 0)->get();
             return view('dashboard.magasinier.commande.particulier.commande-valide', compact('particulierdevis'));
         }

@@ -129,6 +129,24 @@
                               <option value="{{ $categorie->id }}">{{ $categorie->nom }}</option>
                             @endforeach
                           </select>
+                          @error('categorie') <span class="text-danger"> {{ $message }} </span> @enderror
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                      <div class="mb-4">
+                        <label for="categoryLabel" class="form-label">Type de produit</label>
+                        <div class="tom-select-custom">
+                          <select name="TP" class="js-select form-select" autocomplete="off" id="categoryLabel" data-hs-tom-select-options='{
+                                    "searchInDropdown": false,
+                                    "hideSearch": true,
+                                    "placeholder": "Select category"
+                                  }' required>
+                            <option value="0">Vente</option>
+                            <option value="1">Prestation de service</option>
+                          </select>
+                          @error('TP') <span class="text-danger"> {{ $message }} </span> @enderror
                         </div>
                       </div>
                     </div>

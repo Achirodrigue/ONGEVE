@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\User;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
@@ -40,11 +41,12 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
         $this->middleware('guest:admin')->except('logout');
         $this->middleware('guest:ressource')->except('logout');
-        
         $this->middleware('guest:comptable')->except('logout');
         $this->middleware('guest:commercial')->except('logout');
         $this->middleware('guest:magasinier')->except('logout');
-        $this->middleware('guest:logistique')->except('logout');
+        $this->middleware('guest:geststock')->except('logout');
+        $this->middleware('guest:packauto')->except('logout');
+        $this->middleware('guest:secretaire')->except('logout');
     }
 
     //admin
@@ -64,29 +66,6 @@ class LoginController extends Controller
 
             if ($logged){
                 return redirect()->intended(route('admin.home'));
-            }
-
-            return back()->withInput($request->only('identifiant', 'remember'))->with('error','Coordonnées incorrects');
-        }
-    //
-
-    //logistique
-        public function logistiqueLogin()
-        {
-            return view('auth.login-logistique', ['url' => route('logistique.loginpost')]);
-        }
-        public function logistiqueLoginPost(Request $request)
-        {
-            $this->validate($request, [
-                'identifiant'   => 'required|min:4',
-                'password' => 'required|min:4'
-            ]);
-
-
-            $logged = Auth::guard('logistique')->attempt($request->only(['identifiant','password']));
-
-            if ($logged){
-                return redirect()->intended(route('logistique.home'));
             }
 
             return back()->withInput($request->only('identifiant', 'remember'))->with('error','Coordonnées incorrects');
@@ -119,6 +98,7 @@ class LoginController extends Controller
     //comptable
         public function comptableLogin()
         {
+            // dd(5);
             return view('auth.login-comptable', ['url' => route('comptable.loginpost')]);
         }
         public function comptableLoginPost(Request $request)
@@ -151,7 +131,6 @@ class LoginController extends Controller
                 'password' => 'required|min:4'
             ]);
 
-
             $logged = Auth::guard('magasinier')->attempt($request->only(['identifiant','password']));
 
             if ($logged){
@@ -174,11 +153,76 @@ class LoginController extends Controller
                 'password' => 'required|min:4'
             ]);
 
-
             $logged = Auth::guard('ressource')->attempt($request->only(['identifiant','password']));
 
             if ($logged){
                 return redirect()->intended(route('ressource.home'));
+            }
+
+            return back()->withInput($request->only('identifiant', 'remember'))->with('error','Coordonnées incorrects');
+        }
+    //
+    
+    //pack auto
+        public function packautoLogin()
+        {
+            return view('auth.login-packauto', ['url' => route('packauto.loginpost')]);
+        }
+        public function packautoLoginPost(Request $request)
+        {
+            $this->validate($request, [
+                'identifiant'   => 'required|min:4',
+                'password' => 'required|min:4'
+            ]);
+
+            $logged = Auth::guard('packauto')->attempt($request->only(['identifiant','password']));
+
+            if ($logged){
+                return redirect()->intended(route('packauto.home'));
+            }
+
+            return back()->withInput($request->only('identifiant', 'remember'))->with('error','Coordonnées incorrects');
+        }
+    //
+
+    //gestionnnaire stock
+        public function geststockLogin()
+        {
+            return view('auth.login-geststock', ['url' => route('geststock.loginpost')]);
+        }
+        public function geststockLoginPost(Request $request)
+        {
+            $this->validate($request, [
+                'identifiant'   => 'required|min:4',
+                'password' => 'required|min:4'
+            ]);
+
+            $logged = Auth::guard('geststock')->attempt($request->only(['identifiant','password']));
+
+            if ($logged){
+                return redirect()->intended(route('geststock.home'));
+            }
+
+            return back()->withInput($request->only('identifiant', 'remember'))->with('error','Coordonnées incorrects');
+        }
+    //
+
+    //secretaire
+        public function secretaireLogin()
+        {
+            return view('auth.login-secretaire', ['url' => route('secretaire.loginpost')]);
+        }
+        public function secretaireLoginPost(Request $request)
+        {
+            $this->validate($request, [
+                'identifiant'   => 'required|min:4',
+                'password' => 'required|min:4'
+            ]);
+
+            $logged = Auth::guard('secretaire')->attempt($request->only(['identifiant','password']));
+
+            if ($logged){
+                return redirect()->intended(route('secretaire.home'));
             }
 
             return back()->withInput($request->only('identifiant', 'remember'))->with('error','Coordonnées incorrects');

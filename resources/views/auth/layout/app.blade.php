@@ -19,6 +19,9 @@
   <link href="{{ asset("auth/css/style.css") }}" rel="stylesheet" />
   <!-- CSS Files -->
   <link id="pagestyle" href="{{ asset("auth/assets/css/argon-dashboard.css?v=2.0.4") }}" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
 </head>
 <body class="">
 

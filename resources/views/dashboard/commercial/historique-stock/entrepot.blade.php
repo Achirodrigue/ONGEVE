@@ -87,7 +87,7 @@
       <!-- End Row -->
 
       <!-- Card -->
-      <div class="card">
+      <div class="card card-table">
           @if($produits->count() > 0)
             <!-- Header -->
             <div class="card-header card-header-content-md-between">

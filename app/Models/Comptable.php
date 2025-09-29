@@ -18,6 +18,9 @@ class Comptable extends Authenticatable
         'email',
         'isvalide',
         'photo',
+        'statut',
+        'role',
+        'connexion',
         'identifiant',
         'password',
     ];
@@ -26,5 +29,11 @@ class Comptable extends Authenticatable
         'password',
         'remember_token',
     ];
-    
+
+    //
+        public function fournisseurs()
+        {
+            return $this->hasMany('App\Models\Fournisseur');
+        }
+    //
 }

@@ -1,3 +1,28 @@
+  <div class="modal fade" id="entrepotProduit" tabindex="-1" aria-labelledby="createAKIKeyModalLabel" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header mb-3">
+          <h4 class="modal-title" id="createAKIKeyModalLabel">Choisir l'entrepôt de produit</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        
+        <div class="modal-footer">
+          <div class="row align-items-sm-center flex-grow-1 mx-n2 justify-content-end" style="justify-content: space-around !important;">
+            <div class="col-sm-auto">
+              <div class="d-flex gap-3" style="flex-wrap: wrap; align-items: center; justify-content: space-between;">
+                @foreach(categories() as $categorie)
+                  <a href="{{ route('admin.stock.global.produit', $categorie) }}" class="btn btn-white">{{ $categorie->nom }}</a>
+                @endforeach
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
   <!-- ========== END MAIN CONTENT ========== -->
   <!-- ONLY DEV -->
   <!-- Builder -->

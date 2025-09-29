@@ -11,35 +11,42 @@ class Produit extends Model
 
     protected $fillable = [
         'nom',
-        // 'image',
         'description',
         'prix',
-        'promo',
-        'stock',
         'qtyStock',
+        'qtyC',
         'reference',
-        'isvalide',
-        'etat',
-        'mvente',
-        'categorie_id',
+        'TP',
+        'famille',
+        'reff',
+        'unite',
+        'image',
+        'entrepotcateg_id',
+        'fournisseur_id',
     ];
     
-
-    //categorie
-        public function categorie()
+    //
+        public function fournisseur()
         {
-            return $this->belongsTo('App\Models\Categorie');
+            return $this->belongsTo('App\Models\Fournisseur');
         }
     //
 
-    //Client et particulier devis produit
+    //entrepot categorie
+        public function entrepotcateg()
+        {
+            return $this->belongsTo('App\Models\Entrepotcateg');
+        }
+    //
+
+    //Client et fournisseur devis produit
         public function clientdevisprods()
         {
             return $this->hasMany('App\Models\Clientdevisprod');
         }
-        public function particulierdevisprods()
+        public function fournisseurfps()
         {
-            return $this->hasMany('App\Models\Particulierdevisprod');
+            return $this->hasMany('App\Models\Fournisseurfp');
         }
     //
     
@@ -47,6 +54,10 @@ class Produit extends Model
         public function produitse()
         {
             return $this->hasOne('App\Models\Produitse');
+        }
+        public function produitvendus()
+        {
+            return $this->hasMany('App\Models\Produitvendu');
         }
     //
     

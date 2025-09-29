@@ -18,6 +18,8 @@ class Magasinier extends Authenticatable
         'email',
         'isvalide',
         'photo',
+        'statut',
+        'connexion',
         'identifiant',
         'password',
     ];
@@ -26,5 +28,12 @@ class Magasinier extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    //
+        public function fournisseurfactures()
+        {
+            return $this->hasMany('App\Models\Fournisseurfacture');
+        }
+    //
     
 }

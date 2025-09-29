@@ -3,6 +3,7 @@
 
 
   @include('include.message.dashboard')
+  @include('include.commun.client.commande-client')
 
   <main id="content" role="main" class="main">
     <!-- Content -->
@@ -19,7 +20,7 @@
               </ol>
             </nav> -->
 
-            <h1 class="page-header-title">Details du devis de <span class="text-warning">{{ $clientdevis->client->nom }} {{ $clientdevis->client->prenom }}</span></h1>
+            <h1 class="page-header-title">Details de la commande de <span class="text-warning">{{ $clientdevis->client->nom }}</span></h1>
           </div>
           <!-- End Col -->
 
@@ -35,9 +36,46 @@
       <!-- End Page Header -->
 
       <div class="row">
-        <div class="col-lg-8 mb-5 mb-lg-0 mx-auto">
+        <div class="col-lg-10 mb-5 mb-lg-0 mx-auto">
           <!-- Card -->
-          <div class="card card-lg mb-5">
+
+          <!-- Footer -->
+          <div class="d-flex flex-wrap justify-content-end d-print-none gap-3 mb-5">
+            @php 
+              $produit = null;
+              $prestation = null;
+              if($clientdevis->TDF != 2) { if($clientdevis->clientdevisprods->count() > 0) { $produit = 1; } }
+              else { if($clientdevis->clientdevisprestations->count() > 0) { $prestation = 1; } }
+            @endphp
+
+            @if($produit || $prestation)
+              <a class="btn btn-white" target="_blank" href="{{ route('pdf.devis.commande.client', $clientdevis) }}">
+                <i class="bi-file-earmark-arrow-down me-1"></i> PDF
+              </a>
+              @if(!$clientdevis->clientdevisinfo->isvalide)
+                <a class="btn btn-white" 
+                    @if($clientdevis->TDF == 2)
+                      href="{{ route('commercial.devis.client.create.deux.prestation', $clientdevis) }}">
+                    @else
+                      href="{{ route('commercial.devis.client.create.deux', $clientdevis) }}">
+                    @endif
+                  <i class="bi-pencil-fill me-1"></i>@if($clientdevis->TDF == 2) prestations @else produits @endif
+                </a>
+              @endif
+            @endif
+
+            <a class="btn btn-white" @if($clientdevis->clientdevisbon) href="{{ asset(Storage::url($clientdevis->clientdevisbon->bon)) }}" @else href="#" @endif target="_blank">
+              <i class="bi-eye me-1"></i> @if($clientdevis->clientdevisbon) Bon de commande @else Aucun bon @endif
+            </a>
+            @if(!$clientdevis->clientdevisinfo->isvalide)
+              <a class="btn btn-white" href="#" data-bs-toggle="modal" data-bs-target="#editclientdevis{{ $clientdevis->id }}">
+                <i class="bi-pencil-fill me-1"></i> Modifier
+              </a>
+            @endif
+          </div>
+          <!-- End Footer -->
+           
+          <div class="card card-lg card-table">
             <div class="card-body">
               <div class="row justify-content-lg-between">
                 <div class="col-sm order-2 order-sm-1 mb-3">
@@ -49,7 +87,10 @@
 
                 <div class="col-sm-auto order-1 order-sm-2 text-sm-end mb-3">
                   <div class="mb-3">
-                    <h2>@if($clientdevis->clientdevisinfo->isvalide) Commande @else Devis @endif #</h2>
+                    <h2>
+                      @if($clientdevis->clientdevisinfo->isvalide) Facture @else Devis @endif
+                      @if($clientdevis->TDF == null) Vente @elseif($clientdevis->TDF == 1) Location @else Prestation @endif #
+                    </h2>
                     <span class="d-block">{{ $clientdevis->numero_devis }}</span>
                   </div>
 
@@ -78,69 +119,160 @@
 
                 <div class="col-md text-md-end">
                   <dl class="row">
-                    <dt class="col-sm-8">Frais:</dt>
-                    <dd class="col-sm-4">@if($clientdevis->frais) {{ getprice($clientdevis->frais) }} F @else En cours d'attribution @endif</dd>
+                    <dt class="col-sm-8">Désignation:</dt>
+                    <dd class="col-sm-4">@if($clientdevis->TDF == null) Vente de produit @elseif($clientdevis->TDF == 1) Location de produit @else Prestation de service @endif</dd>
                   </dl>
+                  @if($clientdevis->TDF != 2)
                   <dl class="row">
                     <dt class="col-sm-8">Délai de livraison:</dt>
                     <dd class="col-sm-4">@if($clientdevis->delai_livraison) {{ $clientdevis->delai_livraison }} @else En cours @endif</dd>
+                  </dl>
+                  @endif
+                  <dl class="row">
+                    <dt class="col-sm-8">Statut:</dt>
+                    <dd class="col-sm-4">@if($clientdevis->status == null) Impayé @elseif($clientdevis->status == 1) Payé @else Partielle @endif</dd>
+                  </dl>
+                  @if($clientdevis->frais)
+                    <dl class="row">
+                      <dt class="col-sm-8">Frais:</dt>
+                      <dd class="col-sm-4">{{ getpricefr($clientdevis->frais) }}</dd>
+                    </dl>
+                  @endif
+                  <dl class="row">
+                    <dt class="col-sm-8">Reste à payer:</dt>
+                    <dd class="col-sm-4">{{ getpricefr($clientdevis->total_payer - $clientdevis->versement) }}</dd>
                   </dl>
                 </div>
                 <!-- End Col -->
               </div>
               <!-- End Row -->
 
-              <!-- Table -->
-              <div class="table-responsive">
-                <table class="table table-borderless table-nowrap table-align-middle">
-                  <thead class="thead-light">
-                    <tr>
-                      <th>Produit</th>
-                      <th>Quantité</th>
-                      <th>Prix unitaire (Fcfa)</th>
-                      <th class="table-text-end">Total (Fcfa)</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    @foreach($clientdevis->clientdevisprods as $clientdevisprod)
+              
+              @if($clientdevis->TDF == 1)
+                <div class="table-responsive card-table">
+                  <table class="table table-borderless table-nowrap table-align-middle">
+                    <thead class="thead-light">
                       <tr>
-                        <td>
-                          <h5 class="text-inherit mb-0">{{ $clientdevisprod->produit->nom }} @if($clientdevisprod->clientdevisremise && $clientdevisprod->clientdevisremise->TR)<span class="text-danger font-remise">({{ $clientdevisprod->clientdevisremise->remise }}%)</span>@endif</h5>
-                        </td>
-                        <td>{{ $clientdevisprod->quantite }}</td>
-                        <td>{{ getprice($clientdevisprod->prix_unitaire) }}</td>
-                        <td class="table-text-end">{{ getprice($clientdevisprod->prix_total) }}</td>
+                        <th>Désignation</th>
+                        <th>Nbre jours</th>
+                        <th>Quantité</th>
+                        <th>PU (Fcfa)</th>
+                        <th class="table-text-end">Total (Fcfa)</th>
                       </tr>
-                    @endforeach
+                    </thead>
 
-                    <!-- <tr>
-                      <th>Web project</th>
-                      <td>1</td>
-                      <td>24</td>
-                      <td class="table-text-end">$1250</td>
-                    </tr> -->
-                  </tbody>
-                </table>
-              </div>
-              <!-- End Table -->
+                    <tbody>
+                      @foreach($clientdevis->clientdevisprods as $clientdevisprod)
+                        <tr>
+                          <td>
+                            <h5 class="text-inherit mb-0">
+                              {{ $clientdevisprod->produit->nom }} 
+                              @if($clientdevisprod->clientdevisremise && $clientdevisprod->clientdevisremise->TR)<span class="text-danger font-remise">({{ $clientdevisprod->clientdevisremise->remise }}%)</span>@endif
+                            </h5>
+                          </td>
+                          <td>{{ $clientdevisprod->nbre_jour }}</td>
+                          <td>{{ $clientdevisprod->quantite }}</td>
+                          <td>{{ getprice($clientdevisprod->prix_unitaire) }}</td>
+                          <td class="table-text-end">{{ getprice($clientdevisprod->prix_total) }}</td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
 
-              <hr class="my-5">
+                <hr class="my-5">
+              @elseif($clientdevis->TDF == 2)
+                <div class="table-responsive">
+                  <table class="table table-borderless table-nowrap table-align-middle">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Désignation</th>
+                        <th>Unité</th>
+                        <th>Nbre passages</th>
+                        <th>PU (Fcfa)</th>
+                        <th class="table-text-end">Total (Fcfa)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach($clientdevis->clientdevisprestations as $clientdevisprestation)
+                        <tr>
+                          <td>
+                            <h5 class="text-inherit mb-0">{{ $clientdevisprestation->designation }}</h5>
+                          </td>
+                          <td>{{ $clientdevisprestation->unite }}</td>
+                          <td>{{ $clientdevisprestation->nbre_passage }}</td>
+                          <td>{{ getprice($clientdevisprestation->prix_unitaire) }}</td>
+                          <td class="table-text-end">{{ getprice($clientdevisprestation->prix_total) }}</td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+
+                <hr class="my-5">
+              @else
+                <div class="table-responsive">
+                  <table class="table table-borderless table-nowrap table-align-middle">
+                    <thead class="thead-light">
+                      <tr>
+                        <th>Désignation</th>
+                        <th>Unité</th>
+                        <th>QTE</th>
+                        <th>PU (Fcfa)</th>
+                        <th class="table-text-end">Total (Fcfa)</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      @foreach($clientdevis->clientdevisprods as $clientdevisprod)
+                        <tr>
+                          <td>
+                            <h5 class="text-inherit mb-0">
+                              {{ $clientdevisprod->produit->nom }} 
+                              @if($clientdevisprod->clientdevisremise && $clientdevisprod->clientdevisremise->TR)<span class="text-danger font-remise">({{ $clientdevisprod->clientdevisremise->remise }}%)</span>@endif
+                            </h5>
+                          </td>
+                          <td>{{ $clientdevisprod->produit->unite }}</td>
+                          <td>{{ $clientdevisprod->quantite }}</td>
+                          <td>{{ getprice($clientdevisprod->prix_unitaire) }}</td>
+                          <td class="table-text-end">{{ getprice($clientdevisprod->prix_total) }}</td>
+                        </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+
+                <hr class="my-5">
+              @endif
 
               <div class="row justify-content-md-end mb-3">
                 <div class="col-md-8 col-lg-7">
                   <dl class="row text-sm-end">
                     <dt class="col-sm-6">Sous total:</dt>
-                    <dd class="col-sm-6">{{ getprice($clientdevis->total_ttc) }}F</dd>
-                    <dt class="col-sm-6">Tax:</dt>
-                    <dd class="col-sm-6">{{ getprice($clientdevis->tva) }}F</dd>
+                    <dd class="col-sm-6">{{ getpricefr($clientdevis->total_ttc) }}</dd>
+                    @if($clientdevis->tva) 
+                      <dt class="col-sm-6">Tax:</dt>
+                      <dd class="col-sm-6">{{ getpricefr($clientdevis->tva) }}</dd>
+                    @endif
+                    @if($clientdevis->airsi) 
+                      <dt class="col-sm-6">AIRSI @if($clientdevis->airsi) <span class="font-remise">({{ $clientdevis->airsi }}%)</span> @endif :</dt>
+                      <dd class="col-sm-6">{{ getpricefr($clientdevis->airsi_montant) }}</dd> 
+                    @endif
+                    <!-- @if($clientdevis->timbre) 
+                      <dt class="col-sm-6">Timbre @if($clientdevis->timbre) <span class="text-danger font-remise">({{ $clientdevis->timbre }}%)</span> @endif :</dt>
+                      <dd class="col-sm-6">{{ getpricefr($clientdevis->timbre_montant) }}</dd> 
+                    @endif -->
+                    @if($clientdevis->timbre_montant) 
+                      <dt class="col-sm-6">Timbre :</dt>
+                      <dd class="col-sm-6">{{ getpricefr($clientdevis->timbre_montant) }}</dd> 
+                    @endif
                     <dt class="col-sm-6">Total:</dt>
-                    <dd class="col-sm-6">{{ getprice($clientdevis->total_ttc + $clientdevis->frais + $clientdevis->tva) }}F</dd>
+                    <!-- <dd class="col-sm-6">{{ getpricefr($clientdevis->total_payer + $clientdevis->frais + $clientdevis->timbre_montant) }}</dd> -->
+                    <dd class="col-sm-6">{{ getpricefr($clientdevis->total_payer) }}</dd>
                   </dl>
                   <!-- End Row -->
                 </div>
               </div>
-              <!-- End Row -->
 
               <div class="mb-3">
                 <h3>Merci !</h3>
@@ -151,20 +283,6 @@
             </div>
           </div>
           <!-- End Card -->
-
-          <!-- Footer -->
-          <div class="d-flex justify-content-end d-print-none gap-3">
-            <a class="btn btn-white" href="{{ route('pdf.devis.commande.client', $clientdevis) }}" target="_blank">
-              <i class="bi-file-earmark-arrow-down me-1"></i> PDF
-            </a>
-
-            @if(!$clientdevis->clientdevisinfo->isvalide)
-            <a class="btn btn-primary" href="{{ route('commercial.devis.client.convertir.update', $clientdevis) }}">
-              <i class="bi-printer me-1"></i> Convertir en commande
-            </a>
-            @endif
-          </div>
-          <!-- End Footer -->
         </div>
 
         <!-- <div class="col-lg-4">
@@ -251,43 +369,6 @@
       </div>
     </div>
     <!-- End Content -->
-
-    <!-- Footer -->
-
-    <div class="footer">
-      <div class="row justify-content-between align-items-center">
-        <div class="col">
-          <p class="fs-6 mb-0">&copy; Front. <span class="d-none d-sm-inline-block">2022 Htmlstream.</span></p>
-        </div>
-        <!-- End Col -->
-
-        <div class="col-auto">
-          <div class="d-flex justify-content-end">
-            <!-- List Separator -->
-            <ul class="list-inline list-separator">
-              <li class="list-inline-item">
-                <a class="list-separator-link" href="#">FAQ</a>
-              </li>
-
-              <li class="list-inline-item">
-                <a class="list-separator-link" href="#">License</a>
-              </li>
-
-              <li class="list-inline-item">
-                <!-- Keyboard Shortcuts Toggle -->
-                <button class="btn btn-ghost-secondary btn btn-icon btn-ghost-secondary rounded-circle" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasKeyboardShortcuts" aria-controls="offcanvasKeyboardShortcuts">
-                  <i class="bi-command"></i>
-                </button>
-                <!-- End Keyboard Shortcuts Toggle -->
-              </li>
-            </ul>
-            <!-- End List Separator -->
-          </div>
-        </div>
-        <!-- End Col -->
-      </div>
-      <!-- End Row -->
-    </div>
 
     <!-- End Footer -->
   </main>

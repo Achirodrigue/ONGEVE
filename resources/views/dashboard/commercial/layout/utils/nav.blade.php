@@ -4,10 +4,10 @@
       <!-- Logo -->
       <a class="navbar-brand" href="#" aria-label="Front">
           <!-- <h3 class="fw-bold navbar-brand-logo mb-0" style="color: blue;">{{ auth()->user()->nom }} <br> {{ auth()->user()->prenom }}</h3> -->
-          <img class="navbar-brand-logo" src="{{ asset("dashboard/img/logo1.jpg") }}" alt="Logo" data-hs-theme-appearance="default">
-          <img class="navbar-brand-logo" src="{{ asset("dashboard/img/logo1.jpg") }}" alt="Logo" data-hs-theme-appearance="dark">
-          <img class="navbar-brand-logo-mini" src="{{ asset("dashboard/img/logo1.jpg") }}" alt="Logo" data-hs-theme-appearance="default">
-          <img class="navbar-brand-logo-mini" src="{{ asset("dashboard/img/logo1.jpg") }}" alt="Logo" data-hs-theme-appearance="dark">
+          <img class="navbar-brand-logo" src="{{ asset("dashboard/img/logo1.png") }}" alt="Logo" data-hs-theme-appearance="default">
+          <img class="navbar-brand-logo" src="{{ asset("dashboard/img/logo1.png") }}" alt="Logo" data-hs-theme-appearance="dark">
+          <img class="navbar-brand-logo-mini" src="{{ asset("dashboard/img/logo1.png") }}" alt="Logo" data-hs-theme-appearance="default">
+          <img class="navbar-brand-logo-mini" src="{{ asset("dashboard/img/logo1.png") }}" alt="Logo" data-hs-theme-appearance="dark">
       </a>
       <!-- End Logo -->
 
@@ -25,7 +25,7 @@
           <!-- Input Group -->
           <div class="d-none d-lg-block">
             <div class="input-group input-group-merge input-group-borderless input-group-hover-light navbar-input-group">
-              <div class="input-group-prepend input-group-text">
+              <!-- <div class="input-group-prepend input-group-text">
                 <i class="bi-search"></i>
               </div>
 
@@ -38,11 +38,16 @@
                      }'>
               <a class="input-group-append input-group-text" href="javascript:;">
                 <i id="clearSearchResultsIcon" class="bi-x-lg" style="display: none;"></i>
-              </a>
+              </a> -->
+              <div class="marquee-rtl">
+                  <div>
+                      Aucune notification pour le moment
+                  </div>
+              </div>
             </div>
           </div>
 
-          <button class="js-form-search js-form-search-mobile-toggle btn btn-ghost-secondary btn-icon rounded-circle d-lg-none" type="button" data-hs-form-search-options='{
+          <!-- <button class="js-form-search js-form-search-mobile-toggle btn btn-ghost-secondary btn-icon rounded-circle d-lg-none" type="button" data-hs-form-search-options='{
                        "clearIcon": "#clearSearchResultsIcon",
                        "dropMenuElement": "#searchDropdownMenu",
                        "dropMenuOffset": 20,
@@ -50,7 +55,7 @@
                        "activeClass": "focus"
                      }'>
             <i class="bi-search"></i>
-          </button>
+          </button> -->
           <!-- End Input Group -->
 
           <!-- Card Search Content -->
@@ -182,11 +187,9 @@
 
               <div class="dropdown-menu dropdown-menu-end dropdown-card navbar-dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="navbarNotificationsDropdown" style="width: 25rem;">
                 <div class="card">
-                  <!-- Header -->
                   <div class="card-header card-header-content-between">
                     <h4 class="card-title mb-0">Notifications</h4>
 
-                    <!-- Unfold -->
                     <div class="dropdown">
                       <button type="button" class="btn btn-icon btn-sm btn-ghost-secondary rounded-circle" id="navbarNotificationsDropdownSettings" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi-three-dots-vertical"></i>
@@ -213,30 +216,30 @@
                         </a>
                       </div>
                     </div>
-                    <!-- End Unfold -->
                   </div>
-                  <!-- End Header -->
-
-                  <!-- Nav -->
+                  
                   <ul class="nav nav-tabs nav-justified" id="notificationTab" role="tablist">
                     <li class="nav-item">
                       <a class="nav-link active" href="#notificationNavOne" id="notificationNavOne-tab" data-bs-toggle="tab" data-bs-target="#notificationNavOne" role="tab" aria-controls="notificationNavOne" aria-selected="true">Messages (3)</a>
                     </li>
                     <li class="nav-item">
-                      <a class="nav-link" href="#notificationNavTwo" id="notificationNavTwo-tab" data-bs-toggle="tab" data-bs-target="#notificationNavTwo" role="tab" aria-controls="notificationNavTwo" aria-selected="false">Archived</a>
+                      <a class="nav-link" href="#notificationNavTwo" id="notificationNavTwo-tab" data-bs-toggle="tab" data-bs-target="#notificationNavTwo" role="tab" aria-controls="notificationNavTwo" aria-selected="false">Archivé</a>
                     </li>
                   </ul>
-                  <!-- End Nav -->
-
-                  <!-- Body -->
+                  
                   <div class="card-body-height">
-                    <!-- Tab Content -->
                     <div class="tab-content" id="notificationTabContent">
                       <div class="tab-pane fade show active" id="notificationNavOne" role="tabpanel" aria-labelledby="notificationNavOne-tab">
-                        <!-- List Group -->
                         <ul class="list-group list-group-flush navbar-card-list-group">
-                          <!-- Item -->
+
                           <li class="list-group-item form-check-select">
+                            <div class="row">
+                              <div class="col ms-n2">
+                                <h5 class="mb-1">Bientôt disponible</h5>
+                              </div>
+                            </div>
+                          </li>
+                          <!-- <li class="list-group-item form-check-select">
                             <div class="row">
                               <div class="col-auto">
                                 <div class="d-flex align-items-center">
@@ -248,24 +251,18 @@
                                   <img class="avatar avatar-sm avatar-circle" src="assets/img/160x160/img3.jpg" alt="Image Description">
                                 </div>
                               </div>
-                              <!-- End Col -->
 
                               <div class="col ms-n2">
                                 <h5 class="mb-1">Brian Warner</h5>
                                 <p class="text-body fs-5">changed an issue from "In Progress" to <span class="badge bg-success">Review</span></p>
                               </div>
-                              <!-- End Col -->
 
                               <small class="col-auto text-muted text-cap">2hr</small>
-                              <!-- End Col -->
                             </div>
-                            <!-- End Row -->
 
                             <a class="stretched-link" href="#"></a>
                           </li>
-                          <!-- End Item -->
-
-                          <!-- Item -->
+                          
                           <li class="list-group-item form-check-select">
                             <div class="row">
                               <div class="col-auto">
@@ -280,7 +277,6 @@
                                   </div>
                                 </div>
                               </div>
-                              <!-- End Col -->
 
                               <div class="col ms-n2">
                                 <h5 class="mb-1">Klara Hampton</h5>
@@ -289,278 +285,54 @@
                                   Nice work, love! You really nailed it. Keep it up!
                                 </blockquote>
                               </div>
-                              <!-- End Col -->
 
                               <small class="col-auto text-muted text-cap">10hr</small>
-                              <!-- End Col -->
                             </div>
-                            <!-- End Row -->
 
                             <a class="stretched-link" href="#"></a>
-                          </li>
-                          <!-- End Item -->
-
-                          <!-- Item -->
-                          <li class="list-group-item form-check-select">
-                            <div class="row">
-                              <div class="col-auto">
-                                <div class="d-flex align-items-center">
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="notificationCheck3" checked>
-                                    <label class="form-check-label" for="notificationCheck3"></label>
-                                    <span class="form-check-stretched-bg"></span>
-                                  </div>
-                                  <div class="avatar avatar-sm avatar-circle">
-                                    <img class="avatar-img" src="assets/img/160x160/img10.jpg" alt="Image Description">
-                                  </div>
-                                </div>
-                              </div>
-                              <!-- End Col -->
-
-                              <div class="col ms-n2">
-                                <h5 class="mb-1">Ruby Walter</h5>
-                                <p class="text-body fs-5">joined the Slack group HS Team</p>
-                              </div>
-                              <!-- End Col -->
-
-                              <small class="col-auto text-muted text-cap">3dy</small>
-                              <!-- End Col -->
-                            </div>
-                            <!-- End Row -->
-
-                            <a class="stretched-link" href="#"></a>
-                          </li>
-                          <!-- End Item -->
-
-                          <!-- Item -->
-                          <li class="list-group-item form-check-select">
-                            <div class="row">
-                              <div class="col-auto">
-                                <div class="d-flex align-items-center">
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="notificationCheck4">
-                                    <label class="form-check-label" for="notificationCheck4"></label>
-                                    <span class="form-check-stretched-bg"></span>
-                                  </div>
-                                  <div class="avatar avatar-sm avatar-circle">
-                                    <img class="avatar-img" src="assets/svg/brands/google-icon.svg" alt="Image Description">
-                                  </div>
-                                </div>
-                              </div>
-                              <!-- End Col -->
-
-                              <div class="col ms-n2">
-                                <h5 class="mb-1">from Google</h5>
-                                <p class="text-body fs-5">Start using forms to capture the information of prospects visiting your Google website</p>
-                              </div>
-                              <!-- End Col -->
-
-                              <small class="col-auto text-muted text-cap">17dy</small>
-                              <!-- End Col -->
-                            </div>
-                            <!-- End Row -->
-
-                            <a class="stretched-link" href="#"></a>
-                          </li>
-                          <!-- End Item -->
-
-                          <!-- Item -->
-                          <li class="list-group-item form-check-select">
-                            <div class="row">
-                              <div class="col-auto">
-                                <div class="d-flex align-items-center">
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="notificationCheck5">
-                                    <label class="form-check-label" for="notificationCheck5"></label>
-                                    <span class="form-check-stretched-bg"></span>
-                                  </div>
-                                  <div class="avatar avatar-sm avatar-circle">
-                                    <img class="avatar-img" src="assets/img/160x160/img7.jpg" alt="Image Description">
-                                  </div>
-                                </div>
-                              </div>
-                              <!-- End Col -->
-
-                              <div class="col ms-n2">
-                                <h5 class="mb-1">Sara Villar</h5>
-                                <p class="text-body fs-5">completed <i class="bi-journal-bookmark-fill text-primary"></i> FD-7 task</p>
-                              </div>
-                              <!-- End Col -->
-
-                              <small class="col-auto text-muted text-cap">2mn</small>
-                              <!-- End Col -->
-                            </div>
-                            <!-- End Row -->
-
-                            <a class="stretched-link" href="#"></a>
-                          </li>
-                          <!-- End Item -->
+                          </li> -->
                         </ul>
-                        <!-- End List Group -->
                       </div>
 
                       <div class="tab-pane fade" id="notificationNavTwo" role="tabpanel" aria-labelledby="notificationNavTwo-tab">
                         <!-- List Group -->
                         <ul class="list-group list-group-flush navbar-card-list-group">
-                          <!-- Item -->
-                          <li class="list-group-item form-check-select">
-                            <div class="row">
-                              <div class="col-auto">
-                                <div class="d-flex align-items-center">
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="notificationCheck6">
-                                    <label class="form-check-label" for="notificationCheck6"></label>
-                                    <span class="form-check-stretched-bg"></span>
-                                  </div>
-                                  <div class="avatar avatar-sm avatar-soft-dark avatar-circle">
-                                    <span class="avatar-initials">A</span>
-                                  </div>
+                            <li class="list-group-item form-check-select">
+                              <div class="row">
+                                <div class="col ms-n2">
+                                  <h5 class="mb-1">Bientôt disponible</h5>
                                 </div>
                               </div>
-                              <!-- End Col -->
-
-                              <div class="col ms-n2">
-                                <h5 class="mb-1">Anne Richard</h5>
-                                <p class="text-body fs-5">accepted your invitation to join Notion</p>
-                              </div>
-                              <!-- End Col -->
-
-                              <small class="col-auto text-muted text-cap">1dy</small>
-                              <!-- End Col -->
-                            </div>
-                            <!-- End Row -->
-
-                            <a class="stretched-link" href="#"></a>
-                          </li>
-                          <!-- End Item -->
-
-                          <!-- Item -->
-                          <li class="list-group-item form-check-select">
-                            <div class="row">
-                              <div class="col-auto">
-                                <div class="d-flex align-items-center">
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="notificationCheck7">
-                                    <label class="form-check-label" for="notificationCheck7"></label>
-                                    <span class="form-check-stretched-bg"></span>
-                                  </div>
-                                  <div class="avatar avatar-sm avatar-circle">
-                                    <img class="avatar-img" src="assets/img/160x160/img5.jpg" alt="Image Description">
+                              
+                              <a class="stretched-link" href="#"></a>
+                            </li>
+                          <!-- 
+                            <li class="list-group-item form-check-select">
+                              <div class="row">
+                                <div class="col-auto">
+                                  <div class="d-flex align-items-center">
+                                    <div class="form-check">
+                                      <input class="form-check-input" type="checkbox" value="" id="notificationCheck6">
+                                      <label class="form-check-label" for="notificationCheck6"></label>
+                                      <span class="form-check-stretched-bg"></span>
+                                    </div>
+                                    <div class="avatar avatar-sm avatar-soft-dark avatar-circle">
+                                      <span class="avatar-initials">A</span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                              <!-- End Col -->
 
-                              <div class="col ms-n2">
-                                <h5 class="mb-1">Finch Hoot</h5>
-                                <p class="text-body fs-5">left Slack group HS projects</p>
-                              </div>
-                              <!-- End Col -->
-
-                              <small class="col-auto text-muted text-cap">1dy</small>
-                              <!-- End Col -->
-                            </div>
-                            <!-- End Row -->
-
-                            <a class="stretched-link" href="#"></a>
-                          </li>
-                          <!-- End Item -->
-
-                          <!-- Item -->
-                          <li class="list-group-item form-check-select">
-                            <div class="row">
-                              <div class="col-auto">
-                                <div class="d-flex align-items-center">
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="notificationCheck8">
-                                    <label class="form-check-label" for="notificationCheck8"></label>
-                                    <span class="form-check-stretched-bg"></span>
-                                  </div>
-                                  <div class="avatar avatar-sm avatar-dark avatar-circle">
-                                    <span class="avatar-initials">HS</span>
-                                  </div>
+                                <div class="col ms-n2">
+                                  <h5 class="mb-1">Anne Richard</h5>
+                                  <p class="text-body fs-5">accepted your invitation to join Notion</p>
                                 </div>
+
+                                <small class="col-auto text-muted text-cap">1dy</small>
                               </div>
-                              <!-- End Col -->
-
-                              <div class="col ms-n2">
-                                <h5 class="mb-1">Htmlstream</h5>
-                                <p class="text-body fs-5">you earned a "Top endorsed" <i class="bi-patch-check-fill text-primary"></i> badge</p>
-                              </div>
-                              <!-- End Col -->
-
-                              <small class="col-auto text-muted text-cap">6dy</small>
-                              <!-- End Col -->
-                            </div>
-                            <!-- End Row -->
-
-                            <a class="stretched-link" href="#"></a>
-                          </li>
-                          <!-- End Item -->
-
-                          <!-- Item -->
-                          <li class="list-group-item form-check-select">
-                            <div class="row">
-                              <div class="col-auto">
-                                <div class="d-flex align-items-center">
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="notificationCheck9">
-                                    <label class="form-check-label" for="notificationCheck9"></label>
-                                    <span class="form-check-stretched-bg"></span>
-                                  </div>
-                                  <div class="avatar avatar-sm avatar-circle">
-                                    <img class="avatar-img" src="assets/img/160x160/img8.jpg" alt="Image Description">
-                                  </div>
-                                </div>
-                              </div>
-                              <!-- End Col -->
-
-                              <div class="col ms-n2">
-                                <h5 class="mb-1">Linda Bates</h5>
-                                <p class="text-body fs-5">Accepted your connection</p>
-                              </div>
-                              <!-- End Col -->
-
-                              <small class="col-auto text-muted text-cap">17dy</small>
-                              <!-- End Col -->
-                            </div>
-                            <!-- End Row -->
-
-                            <a class="stretched-link" href="#"></a>
-                          </li>
-                          <!-- End Item -->
-
-                          <!-- Item -->
-                          <li class="list-group-item form-check-select">
-                            <div class="row">
-                              <div class="col-auto">
-                                <div class="d-flex align-items-center">
-                                  <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" value="" id="notificationCheck10">
-                                    <label class="form-check-label" for="notificationCheck10"></label>
-                                    <span class="form-check-stretched-bg"></span>
-                                  </div>
-                                  <div class="avatar avatar-sm avatar-soft-dark avatar-circle">
-                                    <span class="avatar-initials">L</span>
-                                  </div>
-                                </div>
-                              </div>
-                              <!-- End Col -->
-
-                              <div class="col ms-n2">
-                                <h5 class="mb-1">Lewis Clarke</h5>
-                                <p class="text-body fs-5">completed <i class="bi-journal-bookmark-fill text-primary"></i> FD-134 task</p>
-                              </div>
-                              <!-- End Col -->
-
-                              <small class="col-auto text-muted text-cap">2mts</small>
-                              <!-- End Col -->
-                            </div>
-                            <!-- End Row -->
-
-                            <a class="stretched-link" href="#"></a>
-                          </li>
-                          <!-- End Item -->
+                              
+                              <a class="stretched-link" href="#"></a>
+                            </li>
+                          -->
                         </ul>
                         <!-- End List Group -->
                       </div>
@@ -571,7 +343,7 @@
 
                   <!-- Card Footer -->
                   <a class="card-footer text-center" href="#">
-                    View all notifications <i class="bi-chevron-right"></i>
+                    Voir toutes les notifications <i class="bi-chevron-right"></i>
                   </a>
                   <!-- End Card Footer -->
                 </div>
@@ -580,109 +352,118 @@
             <!-- End Notification -->
           </li>
 
-          <li class="nav-item d-none d-sm-inline-block">
-            <!-- Apps -->
-            <div class="dropdown">
-              <button type="button" class="btn btn-icon btn-ghost-secondary rounded-circle" id="navbarAppsDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-dropdown-animation>
-                <i class="bi-app-indicator"></i>
-              </button>
+          @if(auth()->user()->statut)
+            <li class="nav-item d-none d-sm-inline-block">
+              <!-- Apps -->
+              <div class="dropdown">
+                <button type="button" class="btn btn-icon btn-ghost-secondary rounded-circle" id="navbarAppsDropdown" data-bs-toggle="dropdown" aria-expanded="false" data-bs-dropdown-animation>
+                  <i class="bi-app-indicator"></i>
+                </button>
 
-              <div class="dropdown-menu dropdown-menu-end dropdown-card navbar-dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="navbarAppsDropdown" style="width: 25rem;">
-                <div class="card">
-                  <!-- Header -->
-                  <div class="card-header">
-                    <h4 class="card-title">Web apps &amp; services</h4>
-                  </div>
-                  <!-- End Header -->
+                <div class="dropdown-menu dropdown-menu-end dropdown-card navbar-dropdown-menu navbar-dropdown-menu-borderless" aria-labelledby="navbarAppsDropdown" style="width: 25rem;">
+                  <div class="card">
+                    <!-- Header -->
+                    <div class="card-header">
+                      <h4 class="card-title">Mes differents services</h4>
+                    </div>
+                    <!-- End Header -->
 
-                  <!-- Body -->
-                  <div class="card-body card-body-height">
-                    <a class="dropdown-item" href="#">
-                      <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                          <img class="avatar avatar-xs avatar-4x3" src="assets/svg/brands/atlassian-icon.svg" alt="Image Description">
-                        </div>
-                        <div class="flex-grow-1 text-truncate ms-3">
-                          <h5 class="mb-0">Atlassian</h5>
-                          <p class="card-text text-body">Security and control across Cloud</p>
-                        </div>
-                      </div>
-                    </a>
-
-                    <a class="dropdown-item" href="#">
-                      <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                          <img class="avatar avatar-xs avatar-4x3" src="assets/svg/brands/slack-icon.svg" alt="Image Description">
-                        </div>
-                        <div class="flex-grow-1 text-truncate ms-3">
-                          <h5 class="mb-0">Slack <span class="badge bg-primary rounded-pill text-uppercase ms-1">Try</span></h5>
-                          <p class="card-text text-body">Email collaboration software</p>
-                        </div>
-                      </div>
-                    </a>
-
-                    <a class="dropdown-item" href="#">
-                      <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                          <img class="avatar avatar-xs avatar-4x3" src="assets/svg/brands/google-webdev-icon.svg" alt="Image Description">
-                        </div>
-                        <div class="flex-grow-1 text-truncate ms-3">
-                          <h5 class="mb-0">Google webdev</h5>
-                          <p class="card-text text-body">Work involved in developing a website</p>
-                        </div>
-                      </div>
-                    </a>
-
-                    <a class="dropdown-item" href="#">
-                      <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                          <img class="avatar avatar-xs avatar-4x3" src="assets/svg/brands/frontapp-icon.svg" alt="Image Description">
-                        </div>
-                        <div class="flex-grow-1 text-truncate ms-3">
-                          <h5 class="mb-0">Frontapp</h5>
-                          <p class="card-text text-body">The inbox for teams</p>
-                        </div>
-                      </div>
-                    </a>
-
-                    <a class="dropdown-item" href="#">
-                      <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                          <img class="avatar avatar-xs avatar-4x3" src="assets/svg/illustrations/review-rating-shield.svg" alt="Image Description">
-                        </div>
-                        <div class="flex-grow-1 text-truncate ms-3">
-                          <h5 class="mb-0">HS Support</h5>
-                          <p class="card-text text-body">Customer service and support</p>
-                        </div>
-                      </div>
-                    </a>
-
-                    <a class="dropdown-item" href="#">
-                      <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                          <div class="avatar avatar-sm avatar-soft-dark">
-                            <span class="avatar-initials"><i class="bi-grid"></i></span>
+                    <!-- Body -->                  
+                    <div class="card-body card-body-height">
+                        <div class="row">
+                          <div class="col ms-n2">
+                            <h5 class="mb-1">Bientôt disponible</h5>
                           </div>
                         </div>
-                        <div class="flex-grow-1 text-truncate ms-3">
-                          <h5 class="mb-0">More Front products</h5>
-                          <p class="card-text text-body">Check out more HS products</p>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                  <!-- End Body -->
+                        <!-- 
+                          <a class="dropdown-item" href="{{ route('comptable.home') }}">
+                            <div class="d-flex align-items-center">
+                              <div class="flex-shrink-0">
+                                <img class="avatar avatar-xs avatar-4x3" src="{{ asset("dashboard/assets/svg/brands/atlassian-icon.svg") }}" alt="Image Description">
+                              </div>
+                              <div class="flex-grow-1 text-truncate ms-3">
+                                <h5 class="mb-0">Comptable</h5>
+                                <p class="card-text text-body">Visiter le tableau de bord</p>
+                              </div>
+                            </div>
+                          </a>
 
-                  <!-- Footer -->
-                  <a class="card-footer text-center" href="#">
-                    View all apps <i class="bi-chevron-right"></i>
-                  </a>
-                  <!-- End Footer -->
+                          <a class="dropdown-item" href="{{ route('commercial.home') }}">
+                            <div class="d-flex align-items-center">
+                              <div class="flex-shrink-0">
+                                <img class="avatar avatar-xs avatar-4x3" src="{{ asset("dashboard/assets/svg/brands/slack-icon.svg") }}" alt="Image Description">
+                              </div>
+                              <div class="flex-grow-1 text-truncate ms-3">
+                                <h5 class="mb-0">Commercial <span class="badge bg-primary rounded-pill text-uppercase ms-1">Try</span></h5>
+                                <p class="card-text text-body">Visiter le tableau de bord</p>
+                              </div>
+                            </div>
+                          </a>
+
+                          <a class="dropdown-item" href="{{ route('magasinier.home') }}">
+                            <div class="d-flex align-items-center">
+                              <div class="flex-shrink-0">
+                                <img class="avatar avatar-xs avatar-4x3" src="{{ asset("dashboard/assets/svg/brands/google-webdev-icon.svg") }}" alt="Image Description">
+                              </div>
+                              <div class="flex-grow-1 text-truncate ms-3">
+                                <h5 class="mb-0">Magasinier</h5>
+                                <p class="card-text text-body">Visiter le tableau de bord</p>
+                              </div>
+                            </div>
+                          </a>
+
+                          <a class="dropdown-item" href="{{ route('magasinier.home') }}">
+                            <div class="d-flex align-items-center">
+                              <div class="flex-shrink-0">
+                                <img class="avatar avatar-xs avatar-4x3" src="{{ asset("dashboard/assets/svg/brands/frontapp-icon.svg") }}" alt="Image Description">
+                              </div>
+                              <div class="flex-grow-1 text-truncate ms-3">
+                                <h5 class="mb-0">Logistique</h5>
+                                <p class="card-text text-body">Visiter le tableau de bord</p>
+                              </div>
+                            </div>
+                          </a>
+
+                          <a class="dropdown-item" href="http://fonction-rh.test/" target="_blanc">
+                            <div class="d-flex align-items-center">
+                              <div class="flex-shrink-0">
+                                <img class="avatar avatar-xs avatar-4x3" src="{{ asset("dashboard/assets/svg/illustrations/review-rating-shield.svg") }}" alt="Image Description">
+                              </div>
+                              <div class="flex-grow-1 text-truncate ms-3">
+                                <h5 class="mb-0">Ressource humaine</h5>
+                                <p class="card-text text-body">Visiter le tableau de bord</p>
+                              </div>
+                            </div>
+                          </a>
+
+                          <a class="dropdown-item" href="{{ route('admin.home') }}">
+                            <div class="d-flex align-items-center">
+                              <div class="flex-shrink-0">
+                                <div class="avatar avatar-sm avatar-soft-dark">
+                                  <span class="avatar-initials"><i class="bi-grid"></i></span>
+                                </div>
+                              </div>
+                              <div class="flex-grow-1 text-truncate ms-3">
+                                <h5 class="mb-0">Retour au tableau de bord</h5>
+                                <p class="card-text text-body">Administrateur</p>
+                              </div>
+                            </div>
+                          </a> 
+                        -->
+                    </div>
+                    <!-- End Body -->
+
+                    <!-- Footer -->
+                    <a class="card-footer text-center" href="#">
+                      Voir tout <i class="bi-chevron-right"></i>
+                    </a>
+                    <!-- End Footer -->
+                  </div>
                 </div>
               </div>
-            </div>
-            <!-- End Apps -->
-          </li>
+              <!-- End Apps -->
+            </li>
+          @endif
 
           <li class="nav-item d-none d-sm-inline-block">
             <!-- Activity -->
@@ -753,10 +534,10 @@
         <a class="navbar-brand" href="index.html" aria-label="Front">
           <!-- <h3 class="fw-bold navbar-brand-logo mb-0" style="color: blue;">{{ auth()->user()->nom }} <br> {{ auth()->user()->prenom }}</h3>-->
           
-          <img class="navbar-brand-logo" src="{{ asset("dashboard/img/logo1.jpg") }}" alt="Logo" data-hs-theme-appearance="default">
-          <img class="navbar-brand-logo" src="{{ asset("dashboard/img/logo1.jpg") }}" alt="Logo" data-hs-theme-appearance="dark">
-          <img class="navbar-brand-logo-mini" src="{{ asset("dashboard/img/logo1.jpg") }}" alt="Logo" data-hs-theme-appearance="default">
-          <img class="navbar-brand-logo-mini" src="{{ asset("dashboard/img/logo1.jpg") }}" alt="Logo" data-hs-theme-appearance="dark"> 
+          <img class="navbar-brand-logo" src="{{ asset("dashboard/img/logo1.png") }}" alt="Logo" data-hs-theme-appearance="default">
+          <img class="navbar-brand-logo" src="{{ asset("dashboard/img/logo1.png") }}" alt="Logo" data-hs-theme-appearance="dark">
+          <img class="navbar-brand-logo-mini" src="{{ asset("dashboard/img/logo1.png") }}" alt="Logo" data-hs-theme-appearance="default">
+          <img class="navbar-brand-logo-mini" src="{{ asset("dashboard/img/logo1.png") }}" alt="Logo" data-hs-theme-appearance="dark"> 
         </a>
 
         <!-- End Logo -->
@@ -797,42 +578,56 @@
               <!-- Devis -->
               <span class="dropdown-header mt-2">Listes des devis</span>
               <div class="nav-item">
-                <a  class="nav-link dropdown-toggle @if(Route::currentRouteName() === 'commercial.devis.client.create' or Route::currentRouteName() === 'commercial.devis.client.create.deux' or Route::currentRouteName() === 'commercial.devis.particulier.create' or Route::currentRouteName() === 'commercial.devis.particulier.create.deux' or Route::currentRouteName() === 'commercial.devis.client.encours' or Route::currentRouteName() === 'commercial.devis.client.finalite' or Route::currentRouteName() === 'commercial.devis.particulier.encours' or Route::currentRouteName() === 'commercial.devis.particulier.finalite') active @endif" 
+                <a  class="nav-link dropdown-toggle @if(Route::currentRouteName() === 'commercial.devis.client.create' or Route::currentRouteName() === 'commercial.devis.client.create.deux' or Route::currentRouteName() === 'commercial.devis.client.encours' or Route::currentRouteName() === 'commercial.devis.client.finalite') active @endif" 
                     href="#devis" role="button" data-bs-toggle="collapse" data-bs-target="#devis" 
                     aria-expanded="false" aria-controls="devis">
                   <i class="bi-grid-1x2 nav-icon"></i>
                   <span class="nav-link-title">Devis</span>
                 </a>
                 <div  id="devis" 
-                      class="nav-collapse collapse @if(Route::currentRouteName() === 'commercial.devis.client.create' or Route::currentRouteName() === 'commercial.devis.client.create.deux' or Route::currentRouteName() === 'commercial.devis.particulier.create' or Route::currentRouteName() === 'commercial.devis.particulier.create.deux' or Route::currentRouteName() === 'commercial.devis.client.encours' or Route::currentRouteName() === 'commercial.devis.client.finalite' or Route::currentRouteName() === 'commercial.devis.particulier.encours' or Route::currentRouteName() === 'commercial.devis.particulier.finalite') show @endif" 
+                      class="nav-collapse collapse @if(Route::currentRouteName() === 'commercial.devis.client.create' or Route::currentRouteName() === 'commercial.devis.client.create.deux' or Route::currentRouteName() === 'commercial.devis.client.encours' or Route::currentRouteName() === 'commercial.devis.client.finalite') show @endif" 
                       data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.devis.client.create' or Route::currentRouteName() === 'commercial.devis.client.create.deux' or Route::currentRouteName() === 'commercial.devis.particulier.create' or Route::currentRouteName() === 'commercial.devis.particulier.create.deux') active @endif" href="{{ route('commercial.devis.client.create') }}">Etablir un devis</a>
-                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.devis.client.encours' or Route::currentRouteName() === 'commercial.devis.client.finalite' or Route::currentRouteName() === 'commercial.devis.particulier.encours' or Route::currentRouteName() === 'commercial.devis.particulier.finalite') active @endif" href="{{ route('commercial.devis.client.encours') }}">Historique des devis </a>
+                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.devis.client.create' or Route::currentRouteName() === 'commercial.devis.client.create.deux') active @endif" href="{{ route('commercial.devis.client.create') }}">Etablir un(e) devis/facture</a>
+                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.devis.client.encours' or Route::currentRouteName() === 'commercial.devis.client.finalite') active @endif" href="{{ route('commercial.devis.client.encours') }}">Historique des devis </a>
                 </div>
               </div>
               <!-- End devis -->
                
-              <span class="dropdown-header mt-2">Listes des commandes</span>
+              <span class="dropdown-header mt-2">Listes des Factures émises</span>
               <div class="nav-item">
-                <a  class="nav-link dropdown-toggle @if(Route::currentRouteName() === 'commercial.commande.client.encours' or Route::currentRouteName() === 'commercial.commande.particulier.encours' or Route::currentRouteName() === 'commercial.commande.client.valide' or Route::currentRouteName() === 'commercial.commande.particulier.valide' or Route::currentRouteName() === 'commercial.commande.client.refuse' or Route::currentRouteName() === 'commercial.commande.particulier.refuse') active @endif" 
-                    href="#commande" role="button" data-bs-toggle="collapse" data-bs-target="#commande" 
-                    aria-expanded="false" aria-controls="commande">
+                <a  class="nav-link dropdown-toggle 
+                    @if(Route::currentRouteName() === 'commercial.facture.client.impaye' or Route::currentRouteName() === 'commercial.facture.client.partielle' or Route::currentRouteName() === 'commercial.facture.client.paye'
+                    ) active @endif" 
+                    href="#facture" role="button" data-bs-toggle="collapse" data-bs-target="#facture" 
+                    aria-expanded="false" aria-controls="facture">
                   <i class="bi-grid-1x2 nav-icon"></i>
-                  <span class="nav-link-title">Commandes</span>
+                  <span class="nav-link-title">Factures émises</span>
                 </a>
 
-                <div  id="commande" 
-                      class="nav-collapse collapse @if(Route::currentRouteName() === 'commercial.commande.client.encours' or Route::currentRouteName() === 'commercial.commande.particulier.encours' or Route::currentRouteName() === 'commercial.commande.client.valide' or Route::currentRouteName() === 'commercial.commande.particulier.valide' or Route::currentRouteName() === 'commercial.commande.client.refuse' or Route::currentRouteName() === 'commercial.commande.particulier.refuse') show @endif" 
+                <div  id="facture" 
+                      class="nav-collapse collapse 
+                      @if(Route::currentRouteName() === 'commercial.facture.client.impaye' or Route::currentRouteName() === 'commercial.facture.client.partielle' or Route::currentRouteName() === 'commercial.facture.client.paye'
+                      ) show @endif" 
                       data-bs-parent="#navbarVerticalMenuPagesMenu">
-                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.commande.client.encours' or Route::currentRouteName() === 'commercial.commande.particulier.encours') active @endif" href="{{ route('commercial.commande.client.encours') }}">Nouvelle commande</a>
-                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.commande.client.valide' or Route::currentRouteName() === 'commercial.commande.particulier.valide') active @endif" href="{{ route('commercial.commande.client.valide') }}">Commande validées</a>
-                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.commande.client.refuse' or Route::currentRouteName() === 'commercial.commande.particulier.refuse') active @endif" href="{{ route('commercial.commande.client.refuse') }}">Commande refusées</a>
+                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.facture.client.impaye') active @endif" href="{{ route('commercial.facture.client.impaye') }}">Factures impayées</a>
+                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.facture.client.partielle') active @endif" href="{{ route('commercial.facture.client.partielle') }}">Factures partielle</a>
+                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.facture.client.paye') active @endif" href="{{ route('commercial.facture.client.paye') }}">Factures finalisées</a>
                 </div>
               </div>
               
+              <!-- @if(!auth()->user()->role)
+              @endif -->
+                <span class="dropdown-header mt-2">Mes apports</span>
+                <div class="nav-item">
+                  <a class="nav-link  @if(Route::currentRouteName() === 'commercial.statistique') active @endif" href="{{ route('commercial.statistique') }}" data-placement="left">
+                    <i class="bi-people nav-icon"></i>
+                    <span class="nav-link-title">Mes apports</span>
+                  </a>
+                </div>
+
               <span class="dropdown-header mt-2">Statistique</span>
               <div class="nav-item">
-                <a class="nav-link  @if(Route::currentRouteName() === 'commercial.statistique') active @endif" href="{{ route('commercial.statistique') }}" data-placement="left">
+                <a class="nav-link  @if(Route::currentRouteName() === 'commercial.statistique.annee' or Route::currentRouteName() === 'commercial.statistique.mois') active @endif" href="{{ route('commercial.statistique.annee') }}" data-placement="left">
                   <i class="bi-people nav-icon"></i>
                   <span class="nav-link-title">Mes statistiques</span>
                 </a>
@@ -853,23 +648,35 @@
                   <span class="nav-link-title">remise client</span>
                 </a>
               </div>
-
-              <span class="dropdown-header mt-2">Historique des stocks</span>
-              <div class="nav-item">
-                <a class="nav-link @if(Route::currentRouteName() === 'commercial.stock.global.produit') active @endif"
-                   href="#" data-placement="left"
-                   data-bs-toggle="modal" data-bs-target="#entrepotProduit">
-                  <i class="bi-people nav-icon"></i>
-                  <span class="nav-link-title">Stock Produits</span>
-                </a>
-              </div>
+              
+                <span class="dropdown-header mt-2">Historique des stocks</span>
+                <div class="nav-item">
+                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.stock.global.produit') active @endif"
+                    href="#" data-placement="left"
+                    data-bs-toggle="modal" data-bs-target="#entrepotProduit">
+                    <i class="bi-people nav-icon"></i>
+                    <span class="nav-link-title">Stock Produits</span>
+                  </a>
+                </div>
 
               @if(auth()->user()->role)
                 <span class="dropdown-header mt-2">Liste des commercials</span>
                 <div class="nav-item">
-                  <a class="nav-link  @if(Route::currentRouteName() === 'commercial.commercial.index' or Route::currentRouteName() === 'commercial.commercial.edit' or Route::currentRouteName() === 'commercial.commercial.edit') active @endif" href="{{ route('commercial.commercial.index') }}" data-placement="left">
+                  <a class="nav-link 
+                            @if(Route::currentRouteName() === 'commercial.commercial.index' or Route::currentRouteName() === 'commercial.commercial.edit' or Route::currentRouteName() === 'commercial.commercial.edit' or
+                                Route::currentRouteName() === 'commercial.commercial.statistique.mois' or Route::currentRouteName() === 'commercial.commercial.statistique.annee' or Route::currentRouteName() === 'commercial.commercial.statistique') 
+                              active @endif" 
+                      href="{{ route('commercial.commercial.index') }}" data-placement="left">
                     <i class="bi-people nav-icon"></i>
                     <span class="nav-link-title">Commercial</span>
+                  </a>
+                </div>
+              
+                <span class="dropdown-header mt-2">Liste des projet</span>
+                <div class="nav-item">
+                  <a class="nav-link @if(Route::currentRouteName() === 'commercial.projet' or Route::currentRouteName() === 'commercial.projet.tache') active @endif" href="{{ route('commercial.projet') }}" data-placement="left">
+                    <i class="bi-people nav-icon"></i>
+                    <span class="nav-link-title">Projet</span>
                   </a>
                 </div>
               @endif

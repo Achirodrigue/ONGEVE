@@ -18,6 +18,8 @@ class Logistique extends Authenticatable
         'email',
         'isvalide',
         'photo',
+        'statut',
+        'connexion',
         'identifiant',
         'password',
     ];

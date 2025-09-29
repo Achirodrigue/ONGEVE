@@ -19,32 +19,44 @@
               <ul class="navbar-nav mx-auto">
                 <li class="nav-item">
                   <a class="nav-link d-flex align-items-center me-2 @if(Route::currentRouteName() === 'comptable.login') active @endif" aria-current="page" href="{{ route('comptable.login') }}">
-                    <i class="fa fa-chart-pie opacity-6 text-dark me-1"></i>
-                    Comptable
+                    <i class="fa fa-key opacity-6 text-dark me-1"></i>
+                    Comptabilité
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link me-2 @if(Route::currentRouteName() === 'commercial.login') active @endif" href="{{ route('commercial.login') }}">
-                    <i class="fa fa-user opacity-6 text-dark me-1"></i>
-                    Commercial
+                    <i class="fa fa-key opacity-6 text-dark me-1"></i>
+                    Vente
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link me-2 @if(Route::currentRouteName() === 'magasinier.login') active @endif" href="{{ route('magasinier.login') }}">
-                    <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
-                    Magasinier
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link me-2 @if(Route::currentRouteName() === 'logistique.login') active @endif" href="{{ route('logistique.login') }}">
+                  <a class="nav-link me-2 @if(Route::currentRouteName() === 'geststock.login') active @endif" href="{{ route('geststock.login') }}">
                     <i class="fas fa-key opacity-6 text-dark me-1"></i>
-                    Logistique
+                    Stock
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link me-2 @if(Route::currentRouteName() === 'ressource.login') active @endif" href="{{ route('ressource.login') }}">
                     <i class="fas fa-key opacity-6 text-dark me-1"></i>
-                    Ressource Humaine
+                    RH
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link me-2 @if(Route::currentRouteName() === 'secretaire.login') active @endif" href="{{ route('secretaire.login') }}">
+                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
+                    Sécretaire
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link me-2 @if(Route::currentRouteName() === 'packauto.login') active @endif" href="{{ route('packauto.login') }}">
+                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
+                    Pack auto
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link me-2 @if(Route::currentRouteName() === 'admin.login') active @endif" href="{{ route('admin.login') }}">
+                    <i class="fas fa-key opacity-6 text-dark me-1"></i>
+                    Directeur général
                   </a>
                 </li>
               </ul>

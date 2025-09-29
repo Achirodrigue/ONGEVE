@@ -1,0 +1,227 @@
+@extends('dashboard.geststock.layout.app')
+@section('body')
+
+
+  @include('include.message.dashboard')
+  
+  <main id="content" role="main" class="main">
+    <!-- Content -->
+    <div class="content container-fluid">
+      <div class="row justify-content-sm-center text-center py-10">
+        <div class="col-sm-7 col-md-5">
+          <img class="img-fluid mb-5" src="{{ asset("dashboard/assets/svg/illustrations/oc-collaboration.svg") }}" alt="Image Description" data-hs-theme-appearance="default">
+          <img class="img-fluid mb-5" src="{{ asset("dashboard/assets/svg/illustrations-light/oc-collaboration.svg") }}" alt="Image Description" data-hs-theme-appearance="dark">
+
+          <h1>En cours de traitement</h1>
+          <p>Bientôt disponible</p>
+
+          <!-- <a class="btn btn-primary" href="layouts/index.html">Create my first campaign</a> -->
+        </div>
+      </div>
+      <!-- End Row -->
+    </div>
+    <!-- End Content -->
+
+  </main>
+
+  <main id="content" role="main" class="main">
+    <!-- Content -->
+    <div class="content container-fluid">
+      <!-- Page Header -->
+      <div class="page-header d-print-none">
+        <div class="row align-items-end">
+          <div class="col-sm mb-2 mb-sm-0">
+            <!-- <nav aria-label="breadcrumb">
+              <ol class="breadcrumb breadcrumb-no-gutter">
+                <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Pages</a></li>
+                <li class="breadcrumb-item"><a class="breadcrumb-link" href="javascript:;">Account</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Invoice</li>
+              </ol>
+            </nav> -->
+
+            <h1 class="page-header-title">Details de la facture de <span class="text-warning">{{ $clientdevis->client->nom }}</span></h1>
+          </div>
+          <!-- End Col -->
+
+          <div class="col-auto">
+            <a class="btn btn-primary" href="{{ route('magasinier.facture.non.livre') }}">
+              <i class="bi-arrow-return-left me-1"></i> Retour
+            </a>
+          </div>
+          <!-- End Col -->
+        </div>
+        <!-- End Row -->
+      </div>
+      <!-- End Page Header -->
+
+      <div class="row">
+        <div class="col-lg-8 mb-5 mb-lg-0 mx-auto">
+          <!-- Card -->
+
+          <!-- Footer -->
+          <div class="d-flex justify-content-end d-print-none gap-3 mb-5">
+            <a class="btn btn-white" href="{{ route('pdf.devis.commande.client', $clientdevis) }}" target="_blank">
+              <i class="bi-file-earmark-arrow-down me-1"></i> PDF
+            </a>
+            <a class="btn btn-white" @if($clientdevis->clientdevisbon) href="{{ asset(Storage::url($clientdevis->clientdevisbon->bon)) }}" @else href="#" @endif target="_blank">
+              <i class="bi-eye me-1"></i> @if($clientdevis->clientdevisbon) Bon de commande @else Aucun bon @endif
+            </a>
+          </div>
+          <!-- End Footer -->
+           
+          <div class="card card-lg">
+            <div class="card-body">
+              <div class="row justify-content-lg-between">
+                <div class="col-sm order-2 order-sm-1 mb-3">
+                  <div class="mb-2">
+                    <img class="avatar" src="{{ asset("dashboard/img/logo1.jpg") }}" style="width: 30%;" alt="Logo">
+                  </div>
+                </div>
+                <!-- End Col -->
+
+                <div class="col-sm-auto order-1 order-sm-2 text-sm-end mb-3">
+                  <div class="mb-3">
+                    <h2>@if($clientdevis->clientdevisinfo->isvalide) Facture @else Devis @endif #</h2>
+                    <span class="d-block">{{ $clientdevis->numero_devis }}</span>
+                  </div>
+
+                  <!-- <address class="text-dark">
+                    45 Roker Terrace<br>
+                    Latheronwheel<br>
+                    KW5 8NW, London<br>
+                    United Kingdom
+                  </address> -->
+                </div>
+                <!-- End Col -->
+              </div>
+              <!-- End Row -->
+
+              <div class="row justify-content-md-between mb-3">
+                <div class="col-md">
+                  <h4>Facturer à:</h4>
+                  <h4>{{ $clientdevis->client->nom }}</h4>
+                  <address>
+                    {{ $clientdevis->client->contact }}<br>
+                    {{ $clientdevis->client->email }}<br>
+                    {{ $clientdevis->client->adresse_postale }}<br>
+                  </address>
+                </div>
+                <!-- End Col -->
+
+                <div class="col-md text-md-end">
+                  <dl class="row">
+                    <dt class="col-sm-8">Désignation:</dt>
+                    <dd class="col-sm-4">@if($clientdevis->TD) Location @else Vente de produit @endif</dd>
+                  </dl>
+                  <dl class="row">
+                    <dt class="col-sm-8">Délai de livraison:</dt>
+                    <dd class="col-sm-4">@if($clientdevis->delai_livraison) {{ $clientdevis->delai_livraison }} @else En cours @endif</dd>
+                  </dl>
+                  <dl class="row">
+                    <dt class="col-sm-8">Statut:</dt>
+                    <dd class="col-sm-4">@if($clientdevis->status == null) Impayé @elseif($clientdevis->status == 1) Payé @else Partielle @endif</dd>
+                  </dl>
+                  <dl class="row">
+                    <dt class="col-sm-8">Reste à payer:</dt>
+                    <dd class="col-sm-4">{{ getprice($clientdevis->total_payer - $clientdevis->versement) }} F</dd>
+                  </dl>
+                </div>
+                <!-- End Col -->
+              </div>
+              <!-- End Row -->
+
+              <!-- Table -->
+              <div class="table-responsive">
+                <table class="table table-borderless table-nowrap table-align-middle">
+                  <thead class="thead-light">
+                    <tr>
+                      <th>Produit</th>
+                      <th>Quantité</th>
+                      <th>Prix unitaire (Fcfa)</th>
+                      <th class="table-text-end">Total (Fcfa)</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    @foreach($clientdevis->clientdevisprods as $clientdevisprod)
+                      <tr>
+                        <td>
+                          <h5 class="text-inherit mb-0">{{ $clientdevisprod->produit->nom }} @if($clientdevisprod->clientdevisremise && $clientdevisprod->clientdevisremise->TR)<span class="text-danger font-remise">({{ $clientdevisprod->clientdevisremise->remise }}%)</span>@endif</h5>
+                        </td>
+                        <td>{{ $clientdevisprod->quantite }}</td>
+                        <td>{{ getprice($clientdevisprod->prix_unitaire) }}</td>
+                        <td class="table-text-end">{{ getprice($clientdevisprod->prix_total) }}</td>
+                      </tr>
+                    @endforeach
+
+                    <!-- <tr>
+                      <th>Web project</th>
+                      <td>1</td>
+                      <td>24</td>
+                      <td class="table-text-end">$1250</td>
+                    </tr> -->
+                  </tbody>
+                </table>
+              </div>
+              <!-- End Table -->
+
+              <hr class="my-5">
+
+              <div class="row justify-content-md-end mb-3">
+                <div class="col-md-8 col-lg-7">
+                  <dl class="row text-sm-end">
+                    <dt class="col-sm-6">Sous total:</dt>
+                    <dd class="col-sm-6">{{ getpricefr($clientdevis->total_ttc) }}</dd>
+                    <dt class="col-sm-6">Frais:</dt>
+                    <dd class="col-sm-6">@if($clientdevis->frais) {{ getpricefr($clientdevis->frais) }} @else Aucun @endif</dd>
+                    <!-- @if($clientdevis->frais) <dd class="col-sm-6">{{ getpricefr($clientdevis->frais) }}</dd> @endif -->
+                    <dt class="col-sm-6">Tax:</dt>
+                    <dd class="col-sm-6">@if($clientdevis->tva) {{ getpricefr($clientdevis->tva) }} @else Aucune @endif</dd>
+                    <!-- @if($clientdevis->tva) <dd class="col-sm-6">{{ getpricefr($clientdevis->tva) }}</dd> @endif -->
+                    <dt class="col-sm-6">AIRSI:</dt>
+                    <dd class="col-sm-6">@if($clientdevis->airsi) {{ getpricefr($clientdevis->airsi) }}% @else Aucune @endif</dd>
+                    <!-- @if($clientdevis->airsi) <dd class="col-sm-6">{{ getpricefr($clientdevis->airsi) }}</dd> @endif -->
+                    <dt class="col-sm-6">Timbre:</dt>
+                    <dd class="col-sm-6">@if($clientdevis->timbre) {{ getpricefr($clientdevis->timbre) }} @else Aucun @endif</dd>
+                    <!-- @if($clientdevis->timbre) <dd class="col-sm-6">{{ getpricefr($clientdevis->timbre) }}</dd> @endif -->
+                    <dt class="col-sm-6">Total:</dt>
+                    <!-- <dd class="col-sm-6">{{ getpricefr($clientdevis->total_ttc + $clientdevis->frais + $clientdevis->tva + $clientdevis->airsi + $clientdevis->timbre) }}</dd> -->
+                    <dd class="col-sm-6">{{ getpricefr($clientdevis->total_payer) }}</dd>
+                  </dl>
+                  <!-- End Row -->
+                </div>
+              </div>
+              <!-- End Row -->
+
+              <div class="mb-3">
+                <h3>Merci !</h3>
+                <p>pour toute la confiance que vous nous accordez</p>
+                <h3>
+                  @if($clientdevis->clientdevisinfo->isvalide && !$clientdevis->clientdevisinfo->magasinier && !$clientdevis->clientdevisinfo->livraison)
+                    Facture en cours de traitement
+                  @endif
+                  @if($clientdevis->clientdevisinfo->isvalide && $clientdevis->clientdevisinfo->magasinier && !$clientdevis->clientdevisinfo->livraison)
+                    Facture en cours de livraison
+                  @endif
+                  @if($clientdevis->clientdevisinfo->isvalide && $clientdevis->clientdevisinfo->magasinier && $clientdevis->clientdevisinfo->livraison)
+                    Facture livrée
+                  @endif
+                </h3>
+              </div>
+
+              <!-- <p class="small mb-0">&copy; 2021 Htmlstream.</p> -->
+            </div>
+          </div>
+          <!-- End Card -->
+        </div>
+        
+      </div>
+    </div>
+    <!-- End Content -->
+
+    <!-- End Footer -->
+  </main>
+  <!-- ========== END MAIN CONTENT ========== -->
+
+
+@endsection

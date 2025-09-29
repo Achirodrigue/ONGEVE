@@ -55,6 +55,20 @@
                 @error('contact') <span class="text-danger">{{ $message }}</span> @enderror
               </div>
             </div>
+            
+            <div class="row mb-4">
+              <div class="col-sm-3 mb-2 mb-sm-0">
+                <div class="d-flex align-items-center mt-2">
+                  <i class="bi-list-ul nav-icon"></i>
+                  <div class="flex-grow-1">Plafond remise</div>
+                </div>
+              </div>
+              <div class="col-sm">
+                <label for="premise" class="visually-hidden form-label">Plafond remise</label>
+                <input type="number" min="1" name="premise" required value="{{ $commercial->premise }}" class="form-control" id="premise">
+                @error('premise') <span class="text-danger">{{ $message }}</span> @enderror
+              </div>
+            </div>
 
             <div class="row mb-4">
               <div class="col-sm-3 mb-2 mb-sm-0">

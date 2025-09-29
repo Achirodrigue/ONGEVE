@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->boolean("isvalide")->default(0);
             $table->boolean("livraison")->default(0);
-            $table->boolean("paye")->default(0);
+            $table->boolean("livraison_retour")->default(0);
+            $table->boolean("magasinier")->default(0);
 
             $table->string('etat')->nullable();
             $table->longText('motif_rejet')->nullable();

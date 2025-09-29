@@ -29,7 +29,21 @@
           </div>
         </div>
 
-        <!-- <div class="js-nav-scroller hs-nav-scroller-horizontal">
+        <!-- 
+
+          <ul class="nav nav-tabs page-header-tabs" id="pageHeaderTab" role="tablist">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">Commandes Impayées</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ route('comptable.commande.client.partielle') }}" tabindex="-1" aria-disabled="true">Commandes Partielle</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ route('comptable.commande.client.paye') }}" tabindex="-1" aria-disabled="true">Commandes Payées</a>
+            </li>
+          </ul>
+        
+        <div class="js-nav-scroller hs-nav-scroller-horizontal">
           <span class="hs-nav-scroller-arrow-prev" style="display: none;">
             <a class="hs-nav-scroller-arrow-link" href="javascript:;">
               <i class="bi-chevron-left"></i>

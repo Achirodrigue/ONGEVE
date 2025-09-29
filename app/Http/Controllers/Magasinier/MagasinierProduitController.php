@@ -53,8 +53,10 @@ class MagasinierProduitController extends Controller
             'description' => 'required|min:5',
             'prix' => 'required|numeric|min:0',
             'qtyStock' => 'required|integer|min:1',
+            'TP' => 'required|min:1|max:1',
             'categorie' => 'required|exists:categories,id',
         ]);
+        // dd(1);
 
         // Sauvegarde d'images
         // $image = storeImage($request->file('image'), "MagasinierProduitImage");
@@ -78,6 +80,7 @@ class MagasinierProduitController extends Controller
             'isvalide' => 1,
             'etat' => null,
             'mvente' => 0,
+            'TP' => $request->TP,
             'reference' => $reference,
             'qtyStock' => $request->qtyStock,
             'categorie_id' => $request->categorie,
@@ -123,7 +126,8 @@ class MagasinierProduitController extends Controller
             // 'image' => 'required|mimes:png,jpg,jpeg',
             'description' => 'required|min:5',
             'prix' => 'required|numeric|min:0',
-            'qtyStock' => 'required|integer|min:1',
+            // 'qtyStock' => 'required|integer|min:1',
+            'TP' => 'required|min:1|max:1',
             'categorie' => 'required|exists:categories,id',
         ]);
 
@@ -146,33 +150,36 @@ class MagasinierProduitController extends Controller
             'nom' => $request->nom,
             'description' => $request->description,
             'prix' => $request->prix,
-            'qtyStock' => $request->qtyStock,
+            // 'qtyStock' => $request->qtyStock,
+            'TP' => $request->TP,
             'categorie_id' => $request->categorie,
             // 'image' => $image, // première image principale
         ]);
     
-        //cal
-            $cal = ($request->qtyStock * 25) / 100 ;
-            $SM = floor($cal);
+        /*
+            //cal
+                $cal = ($request->qtyStock * 25) / 100 ;
+                $SM = floor($cal);
 
-            $entree = $request->qtyStock - $produit->qtyStock ;
-            $entreT = $entree + $produit->produitstat->entree;
-            // $quantite = $entree + $produit->prodse->quantite;
-        //
+                $entree = $request->qtyStock - $produit->qtyStock ;
+                $entreT = $entree + $produit->produitstat->entree;
+                // $quantite = $entree + $produit->prodse->quantite;
+            //
 
-        $produit->produitstat->update([
-            'stock_min' => $SM,
-            'entree' => $entreT
-        ]);
-
-        if($entree > 0)
-        {
-            Produitse::create([
-                'quantite' => $entree,
-                'entree_sortie' => 1,
-                'produit_id' => $produit->id,
+            $produit->produitstat->update([
+                'stock_min' => $SM,
+                'entree' => $entreT
             ]);
-        }
+
+            if($entree > 0)
+            {
+                Produitse::create([
+                    'quantite' => $entree,
+                    'entree_sortie' => 1,
+                    'produit_id' => $produit->id,
+                ]);
+            }
+        */
         
         return redirect()->route('magasinier.produit.index')->with('success', "$produit->nom modifié avec succès");
         // return redirect()->route('magasinier.categorie.produit', [

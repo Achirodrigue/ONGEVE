@@ -13,7 +13,6 @@ class Clientdevisremise extends Model
         'date',
         'remise',
         'prix_remise',
-        'motif',
         'TR',
         'clientdevis_id',
         'clientdevisprod_id',

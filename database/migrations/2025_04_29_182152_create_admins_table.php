@@ -18,7 +18,10 @@ return new class extends Migration
             $table->string('contact');
             $table->string('email')->unique();
             $table->boolean("isvalide")->default(1);
+            $table->boolean("role")->default(1);
+            $table->boolean("statut")->default(1);
             $table->string('photo')->nullable();
+            $table->string('connexion')->default("admin");
             $table->string('identifiant')->unique();
             $table->string('password')->unique();
             $table->timestamps();

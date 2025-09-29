@@ -12,6 +12,7 @@ class Clientinfo extends Model
     protected $fillable = [
         'genre',
         'naissance',
+        'interlocuteur',
         'forme_juridique',
         'numero_identifie',
         'domaine',

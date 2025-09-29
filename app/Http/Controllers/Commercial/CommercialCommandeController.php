@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Storage;
 class CommercialCommandeController extends Controller
 {
     //client
+        /*
         public function commandeClientEncours()
         {
             $clientdevis = Clientdevis::whereHas('clientdevisinfo', function ($query) {
@@ -38,6 +39,7 @@ class CommercialCommandeController extends Controller
             })->orderBy('updated_at','desc')->get();
             return view('dashboard.commercial.commande.client.commande-refuse', compact('clientdevis'));
         }
+        */
     //
 
     // //particulier

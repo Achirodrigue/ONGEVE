@@ -61,8 +61,11 @@
                  }'>
                 <thead class="thead-light">
                   <tr>
-                    <th>Nom et Prénom commercial</th>
+                    @if(auth()->user()->role)
+                      <th>Nom et Prénom commercial</th>
+                    @endif
 
+                    <th>Numero facture</th>
                     <th>Produit</th>
 
                     <th>Remise (en %)</th>
@@ -75,7 +78,10 @@
                 <tbody>
                   @foreach($clientremises as $clientremise)
                     <tr>
-                      <td class="fw-bold">{{ $clientremise->commercial->nom }} {{ $clientremise->commercial->prenom }}</td>
+                      @if(auth()->user()->role)
+                        <td class="fw-bold">@if($clientremise->commercial_id) {{ $clientremise->commercial->nom }} {{ $clientremise->commercial->prenom }} @else Comptabilité @endif</td>
+                      @endif
+                      <td class="fw-bold">{{ $clientremise->clientdevisprod->clientdevis->numero_devis }}</td>
                       <td>
                         <h5 class="text-inherit mb-0">@if($clientremise->TR) {{ $clientremise->clientdevisprod->produit->nom }} @endif</h5>
                       </td>  
@@ -94,7 +100,7 @@
               <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
                 <div class="col-sm mb-2 mb-sm-0">
                   <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
-                    <span class="me-2">Showing:</span>
+                    <span class="me-2">Page:</span>
 
                     <!-- Select -->
                     <div class="tom-select-custom">

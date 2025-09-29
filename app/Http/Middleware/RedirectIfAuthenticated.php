@@ -41,8 +41,16 @@ class RedirectIfAuthenticated
                     return redirect(route('magasinier.home'));
                 }
 
-                if ($guard == "logistique" && Auth::guard($guard)->check()) {
-                    return redirect(route('logistique.home'));
+                if ($guard == "geststock" && Auth::guard($guard)->check()) {
+                    return redirect(route('geststock.home'));
+                }
+
+                if ($guard == "packauto" && Auth::guard($guard)->check()) {
+                    return redirect(route('packauto.home'));
+                }
+
+                if ($guard == "secretaire" && Auth::guard($guard)->check()) {
+                    return redirect(route('secretaire.home'));
                 }
 
                 return redirect(RouteServiceProvider::HOME);

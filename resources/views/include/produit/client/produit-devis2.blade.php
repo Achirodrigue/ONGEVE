@@ -45,7 +45,7 @@
                 @error('remise') <span class="text-danger">{{ $message }}</span> @enderror
               </div>
             </div>
-            <div class="row mb-4">
+            <!-- <div class="row mb-4">
               <div class="col-sm-3 mb-2 mb-sm-0">
                 <div class="d-flex align-items-center mt-2">
                   <div class="flex-grow-1">Motif</div>
@@ -56,7 +56,7 @@
                 <textarea name="motif" id="motif" class="form-control" @if($clientdevisprod->clientdevisremise && !$clientdevisprod->clientdevisremise->TR) placeholder="Motif de la remise" @endif> @if($clientdevisprod->clientdevisremise && $clientdevisprod->clientdevisremise->TR) {{ $clientdevisprod->clientdevisremise->motif }} @endif</textarea>
                 @error('motif') <span class="text-danger">{{ $message }}</span> @enderror
               </div>
-            </div>
+            </div> -->
           </div>
           <!-- End Body -->
 

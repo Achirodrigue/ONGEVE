@@ -57,13 +57,25 @@ class Employe extends Model
         'equipement_fournis', // JSON ou texte libre pour les équipements
     ];
 
-    public function employedocs()
-    {
-        return $this->hasMany(Employedoc::class);
-    }
+    //
+        public function employedocs()
+        {
+            return $this->hasMany(Employedoc::class);
+        }
 
-    public function employecontrats()
-    {
-        return $this->hasMany(Employecontrat::class);
-    }
+        public function employepresences()
+        {
+            return $this->hasMany(Employepresence::class);
+        }
+
+        public function employecontrats()
+        {
+            return $this->hasMany(Employecontrat::class);
+        }
+
+        public function paffectations()
+        {
+            return $this->hasMany('App\Models\Paffectation');
+        }
+    //
 }

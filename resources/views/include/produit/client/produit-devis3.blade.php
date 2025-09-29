@@ -76,7 +76,7 @@
               </div>
               <div class="col-sm">
                 <label for="prenom" class="visually-hidden form-label">commercial</label>
-                <input type="text" value="{{ $clientdevisprod->clientdevisremise->commercial->nom }} {{ $clientdevisprod->clientdevisremise->commercial->prenom }}" class="form-control" readonly>
+                <input type="text" value="@if($clientdevisprod->clientdevisremise->commercial_id) {{ $clientdevisprod->clientdevisremise->commercial->nom }} {{ $clientdevisprod->clientdevisremise->commercial->prenom }} @else Service comptable @endif" class="form-control" readonly>
               </div>
             </div>
           </div>

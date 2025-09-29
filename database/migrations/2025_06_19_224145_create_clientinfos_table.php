@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('genre')->nullable();
             $table->string('naissance')->nullable();
+            $table->string('interlocuteur')->nullable();
             $table->string('forme_juridique')->nullable();
             $table->string('numero_identifie')->nullable();
             $table->string('domaine')->nullable();

@@ -16,9 +16,12 @@ class Commercial extends Authenticatable
         'prenom',
         'contact',
         'email',
+        'premise',
         'isvalide',
+        'statut',
         'photo',
         'role',
+        'connexion',
         'identifiant',
         'password',
     ];
@@ -27,6 +30,11 @@ class Commercial extends Authenticatable
         'password',
         'remember_token',
     ];
+
+    public function getAuthIdentifierName()
+    {
+        return 'identifiant';
+    }
 
     //client
         public function clients()
@@ -58,6 +66,10 @@ class Commercial extends Authenticatable
         public function clientremises()
         {
             return $this->hasMany('App\Models\Clientremise');
+        }
+        public function clientdevisremises()
+        {
+            return $this->hasMany('App\Models\Clientdevisremise');
         }
     //
 

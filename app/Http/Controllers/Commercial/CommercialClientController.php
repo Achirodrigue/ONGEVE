@@ -28,56 +28,50 @@ class CommercialClientController extends Controller
     {
         $this->validate($request, [
             'nom' => 'required|min:2',
-            'adresse_postale' => 'required|min:2',
-            'Pachat' => 'required|min:2',
+            'adresse_postale' => 'nullable|min:2',
+            'Pachat' => 'nullable|min:2',
             'contact' => 'required|unique:clients|min:8|max:12',
-            'email' => 'required|email|unique:clients|min:8',
+            'email' => 'nullable|email|unique:clients|min:8',
+            'NCC' => 'nullable|unique:clients|min:3|max:30',
+            'reference' => 'nullable|unique:clients|min:1|max:30',
+            
+            'interlocuteur' => 'nullable|min:2',
+            'forme_juridique' => 'nullable|min:2',
+            'numero_identifie' => 'nullable|min:2',
+            'domaine' => 'nullable|min:2',
+            'siege_social' => 'nullable|min:2',
+            'genre' => 'nullable|min:4',
+            'naissance' => 'nullable|min:8',
         ]);
-        
+
+        // Génération de la référence
+            $nom = $request->nom;
+            $nomFormater = strtoupper(substr(removeAccents($nom), 0, 3));
+            $reference = "411{$nomFormater}";
+        //
+
         $client = Client::create([
             'nom' => $request->nom,
             'email' => $request->email ,
             'contact' => $request->contact ,
+            'NCC' => $request->NCC ,
             'Pachat' => $request->Pachat,
             'adresse_postale' => $request->adresse_postale,
             'TC' => $request->TC,
+            'reference' => $reference,
             'commercial_id' => auth()->user()->id,
         ]);
 
-        if($request->TC === "0")
-        {
-            $this->validate($request, [
-                'forme_juridique' => 'required|min:2',
-                'numero_identifie' => 'required|min:2',
-                'domaine' => 'required|min:2',
-                'siege_social' => 'required|min:2',
-            ]);
-
-            $clientinfo = Clientinfo::create([
-                'genre' => null,
-                'naissance' => null,
-                'forme_juridique' => $request->forme_juridique,
-                'numero_identifie' => $request->numero_identifie,
-                'domaine' => $request->domaine,
-                'siege_social' => $request->siege_social,
-                'client_id' => $client->id,
-            ]);
-        }else{
-            $this->validate($request, [
-                'genre' => 'required|min:4',
-                'naissance' => 'required|min:8',
-            ]);
-
-            $clientinfo = Clientinfo::create([
-                'genre' => $request->genre,
-                'naissance' => $request->naissance,
-                'forme_juridique' => null,
-                'numero_identifie' => null,
-                'domaine' => null,
-                'siege_social' => null,
-                'client_id' => $client->id,
-            ]);
-        }
+        $clientinfo = Clientinfo::create([
+            'genre' => $request->genre,
+            'naissance' => $request->naissance,
+            'interlocuteur' => $request->interlocuteur,
+            'forme_juridique' => $request->forme_juridique,
+            'numero_identifie' => $request->numero_identifie,
+            'domaine' => $request->domaine,
+            'siege_social' => $request->siege_social,
+            'client_id' => $client->id,
+        ]);
 
         //données
             $noms = $client->nom ;
@@ -93,35 +87,38 @@ class CommercialClientController extends Controller
 
     public function update(Request $request, Client $client)
     {
-        // Validation
         //données
             $noms = $client->nom ;
         //
 
         $this->validate($request, [
             'nom' => 'required|min:2',
-            'adresse_postale' => 'required|min:2',
-            'Pachat' => 'required|min:2',
+            'adresse_postale' => 'nullable|min:2',
+            'Pachat' => 'nullable|min:2',
             'contact'   => 'required|unique:clients,contact,' . $client->id . '|min:8|max:12',
-            'email'   => 'required|email|unique:clients,email,' . $client->id . '|min:8',
+            'email'   => 'nullable|email|unique:clients,email,' . $client->id . '|min:8',
+            'NCC' => 'nullable|unique:clients,NCC,' . $client->id . '|min:3|max:30',
+            'reference' => 'nullable|unique:clients,reference,' . $client->id . '|min:1|max:30',
+            
+            'interlocuteur' => 'nullable|min:2',
+            'forme_juridique' => 'nullable|min:2',
+            'numero_identifie' => 'nullable|min:2',
+            'domaine' => 'nullable|min:2',
+            'siege_social' => 'nullable|min:2',
+            'genre' => 'nullable|min:4',
+            'naissance' => 'nullable|min:8',
         ]);
         
-        $client->update($request->post());
+        // Génération de la référence
+            $nom = $request->nom;
+            $nomFormater = strtoupper(substr(removeAccents($nom), 0, 3));
+            $reference = "411{$nomFormater}";
+        //
 
-        if($request->TC === "0")
-        {
-            $this->validate($request, [
-                'forme_juridique' => 'required|min:2',
-                'numero_identifie' => 'required|min:2',
-                'domaine' => 'required|min:2',
-                'siege_social' => 'required|min:2',
-            ]);
-        }else{
-            $this->validate($request, [
-                'genre' => 'required|min:4',
-                'naissance' => 'required|min:8',
-            ]);
-        }
+        $client->update($request->post());
+        $client->update([
+            'reference' => $reference,
+        ]);
         
         $client->clientinfo->update($request->post());
         

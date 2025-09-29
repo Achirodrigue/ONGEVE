@@ -12,7 +12,8 @@ class Clientdevisinfo extends Model
     protected $fillable = [
         'isvalide',
         'livraison',
-        'paye',
+        'livraison_retour',
+        'magasinier',
 
         'etat',
         'motif_rejet',

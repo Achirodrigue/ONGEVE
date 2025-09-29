@@ -11,27 +11,27 @@
       <div class="page-header">
         <div class="row align-items-center mb-3">
           <div class="col-sm mb-2 mb-sm-0">
-            <h1 class="page-header-title">Ajout de produit dans le devis de 
+            <h1 class="page-header-title">Ajout de produit dans @if($clientdevis->clientdevisinfo->isvalide) la facture @else le devis @endif de 
               <span class="badge bg-soft-dark text-dark ms-2">{{ $clientdevis->client->nom }} {{ $clientdevis->client->prenom }}</span>
             </h1>
           </div>
           <!-- End Col -->
-           @if($clientdevis->clientdevisprods()->count() > 0)
-          <div class="col-auto">
-            <a class="btn btn-primary" href="{{ route('pdf.devis.commande.client', $clientdevis) }}">
-              <i class="bi-file-earmark-arrow-down me-1"></i> PDF
-            </a>
-          </div>
-          <div class="col-auto">
-            <a class="btn btn-primary" href="{{ route('commercial.devis.client.finalite', $clientdevis) }}">
-              <i class="bi-printer me-1"></i> Finalité
-            </a>
-          </div>
-          <div class="col-auto">
-            <a class="btn btn-primary" href="{{ route('commercial.devis.client.convertir.update', $clientdevis) }}">
-              <i class="bi-share-fill me-1"></i> Convertir en commande
-            </a>
-          </div>
+          @if($clientdevis->clientdevisprods()->count() > 0)
+            <div class="col-auto">
+              <a class="btn btn-primary" target="_blank" href="{{ route('pdf.devis.commande.client', $clientdevis) }}">
+                <i class="bi-file-earmark-arrow-down me-1"></i> PDF
+              </a>
+            </div>
+            <div class="col-auto">
+              <a class="btn btn-primary" href="{{ route('commercial.devis.client.finalite', $clientdevis) }}">
+                <i class="bi-printer me-1"></i> Finalité
+              </a>
+            </div>
+            <div class="col-auto">
+              <a class="btn btn-primary" href="{{ route('commercial.devis.client.convertir.update', $clientdevis) }}">
+                <i class="bi-share-fill me-1"></i> Convertir en commande
+              </a>
+            </div>
           @endif
           <div class="col-auto">
             <a class="btn btn-primary" href="{{ route('commercial.devis.client.encours') }}">
@@ -133,7 +133,7 @@
           @else
               <!-- Header -->
               <div class="card-header card-header-content-md-between p-4">
-                <h4 class="fw-bold mb-0 text-center">Désolé! Aucun produit n'a été associé à ce devis</h4>
+                <h4 class="fw-bold mb-0 text-center">Désolé! Aucun produit n'a été associé à @if($clientdevis->clientdevisinfo->isvalide) cette facture @else ce devis @endif</h4>
               </div>
               <!-- End Header -->
           @endif
@@ -142,7 +142,11 @@
 
       <!-- Card -->
       <div class="card card-table">
-          @if(produits()->count() > 0)
+          @php 
+            $TP=0; 
+            if($clientdevis->TD) {$TP=1;}
+          @endphp
+          @if(produits()->where('TP', $TP)->count() > 0)
             <!-- Header -->
             <div class="card-header card-header-content-md-between">
               <div class="mb-2 mb-md-0 w-100">
@@ -152,7 +156,7 @@
                     <div class="input-group-prepend input-group-text">
                       <i class="bi-search"></i>
                     </div>
-                    <input id="datatableSearch" type="search" class="form-control" placeholder="Search users" aria-label="Search users">
+                    <input id="datatableSearch" type="search" class="form-control" placeholder="Rechercher un produit" aria-label="Search users">
                   </div>
                   <!-- End Search -->
                 </form>
@@ -191,13 +195,23 @@
                 </thead>
 
                 <tbody>
-                  @foreach(produits() as $produit)
+                  @foreach(produits()->where('TP', $TP) as $produit)
                     <tr>
                       <td>
                         <h5 class="text-inherit mb-0">{{ $produit->nom }}</h5>
                       </td>
                       <td class="fw-bold">{{ getprice($produit->prix) }}</td>
-                      <td class="text-warning">{{ $produit->qtyStock }} (en stock)</td>
+                      @php 
+                        $qtyC = 0;
+                        foreach($produit->clientdevisprods as $clientdevisprod)
+                        {
+                          if($clientdevisprod->clientdevis->clientdevisinfo->isvalide && !$clientdevisprod->clientdevis->clientdevisinfo->livraison)
+                          {
+                            $qtyC += $clientdevisprod->quantite;
+                          }
+                        }
+                      @endphp
+                      <td class="text-warning">{{ $produit->qtyStock }} @if($qtyC > 0) ({{ $qtyC }} en commande) @endif</td>
                       <td class="text-warning">{{ $produit->reference }}</td>
                       <td class="fw-bold">{{ $produit->categorie->nom }}</td>
                       <td>
@@ -212,8 +226,6 @@
                       </td>
                     </tr>
                     @include('include.produit.client.produit-devis1')
-
-                    @include('include.produit.produit')
                   @endforeach
                 </tbody>
               </table>
@@ -225,7 +237,7 @@
               <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
                 <div class="col-sm mb-2 mb-sm-0">
                   <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
-                    <span class="me-2">Showing:</span>
+                    <span class="me-2">Page:</span>
 
                     <!-- Select -->
                     <div class="tom-select-custom">
@@ -263,7 +275,7 @@
           @else
               <!-- Header -->
               <div class="card-header card-header-content-md-between p-4">
-                <h3 class="fw-bold mb-0 text-center">Désolé! Aucun produit n'a été ajouté sur la plateforme</h3>
+                <h3 class="fw-bold mb-0 text-center">Désolé! Aucun produit de <span class="text-danger">@if($clientdevis->TD) prestation de service @else vente @endif</span> n'a été ajouté sur la plateforme</h3>
               </div>
               <!-- End Header -->
           @endif

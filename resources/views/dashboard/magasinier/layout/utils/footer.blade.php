@@ -37,15 +37,15 @@
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasBuilder" aria-labelledby="offcanvasBuilderLabel">
     <div class="offcanvas-header align-items-start">
       <div>
-        <h3 id="offcanvasBuilderLabel">Front Builder</h3>
-        <p class="mb-0">Customize the overview page layout.</p>
+        <h3 id="offcanvasBuilderLabel">Constructeur de façade</h3>
+        <p class="mb-0">Personnalisez la mise en page de la page d'aperçu.</p>
       </div>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
 
     <div class="offcanvas-body">
-      <h4 class="mb-1">Theme Appearance Mode</h4>
-      <p>Check out all <a href="documentation/layout.html">Layout Options here</a></p>
+      <h4 class="mb-1">Mode d'apparence du thème</h4>
+      <p>Découvrez toutes <a href="documentation/layout.html">les options de mise en page ici</a></p>
 
       <div class="row gx-3">
         <!-- Check -->
@@ -53,9 +53,9 @@
           <div class="form-check form-check-label-highlighter text-center">
             <input type="radio" class="form-check-input" name="layoutSkinsRadio" id="layoutSkinsRadio1" checked value="default">
             <label class="form-check-label mb-2" for="layoutSkinsRadio1">
-              <img class="form-check-img" src="assets/img/415x310/img1.jpg" alt="Image Description">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/img/415x310/img1.jpg") }}" alt="Image Description">
             </label>
-            <span class="form-check-text">Default</span>
+            <span class="form-check-text">Défaut</span>
           </div>
         </div>
         <!-- End Check -->
@@ -65,9 +65,9 @@
           <div class="form-check form-check-label-highlighter text-center">
             <input type="radio" class="form-check-input" name="layoutSkinsRadio" id="layoutSkinsRadio2" value="dark">
             <label class="form-check-label mb-2" for="layoutSkinsRadio2">
-              <img class="form-check-img" src="assets/img/415x310/img2.jpg" alt="Image Description">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/img/415x310/img2.jpg") }}" alt="Image Description">
             </label>
-            <span class="form-check-text">Dark Mode</span>
+            <span class="form-check-text">Mode sombre</span>
           </div>
         </div>
         <!-- End Check -->
@@ -82,10 +82,10 @@
           <div class="form-check form-check-label-highlighter text-center">
             <input type="radio" class="form-check-input" name="layout" id="navbarLayoutSkinsRadio1" checked value="default">
             <label class="form-check-label mb-2" for="navbarLayoutSkinsRadio1">
-              <img class="form-check-img" src="assets/svg/layouts-light/sidebar-default.svg" alt="Image Description" data-hs-theme-appearance="dark">
-              <img class="form-check-img" src="assets/svg/layouts/sidebar-default.svg" alt="Image Description" data-hs-theme-appearance="default">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts-light/sidebar-default.svg") }}" alt="Image Description" data-hs-theme-appearance="dark">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts/sidebar-default.svg") }}" alt="Image Description" data-hs-theme-appearance="default">
             </label>
-            <span class="form-check-text">Default</span>
+            <span class="form-check-text">Défaut</span>
           </div>
         </div>
         <!-- End Check -->
@@ -95,10 +95,10 @@
           <div class="form-check form-check-label-highlighter text-center">
             <input type="radio" class="form-check-input" name="layout" id="navbarLayoutSkinsRadio2" value="navbar-dark">
             <label class="form-check-label mb-2" for="navbarLayoutSkinsRadio2">
-              <img class="form-check-img" src="assets/svg/layouts-light/sidebar-dark.svg" alt="Image Description" data-hs-theme-appearance="dark">
-              <img class="form-check-img" src="assets/svg/layouts/sidebar-dark.svg" alt="Image Description" data-hs-theme-appearance="default">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts-light/sidebar-dark.svg") }}" alt="Image Description" data-hs-theme-appearance="dark">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts/sidebar-dark.svg") }}" alt="Image Description" data-hs-theme-appearance="default">
             </label>
-            <span class="form-check-text">Dark</span>
+            <span class="form-check-text">Sombre</span>
           </div>
         </div>
         <!-- End Check -->
@@ -107,8 +107,8 @@
 
       <hr>
 
-      <h4 class="mb-1">Sidebar Nav</h4>
-      <p>Check out all <a href="documentation/layout.html">Layout Options here</a></p>
+      <h4 class="mb-1">Navigation dans la barre latérale</h4>
+      <p>Découvrez toutes <a href="documentation/layout.html">les options de mise en page ici</a></p>
 
       <div class="row gx-3">
         <!-- Check -->
@@ -116,10 +116,10 @@
           <div class="form-check form-check-label-highlighter text-center">
             <input type="radio" class="form-check-input" name="sidebarNavOptions" id="sidebarNavOptions1" value="pills" checked>
             <label class="form-check-label mb-2" for="sidebarNavOptions1">
-              <img class="form-check-img" src="assets/svg/layouts-light/demo-layouts-default-classic.svg" alt="Image Description" data-hs-theme-appearance="dark">
-              <img class="form-check-img" src="assets/svg/layouts/demo-layouts-default-classic.svg" alt="Image Description" data-hs-theme-appearance="default">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts-light/demo-layouts-default-classic.svg") }}" alt="Image Description" data-hs-theme-appearance="dark">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts/demo-layouts-default-classic.svg") }}" alt="Image Description" data-hs-theme-appearance="default">
             </label>
-            <span class="form-check-text">Pills</span>
+            <span class="form-check-text">Pilules</span>
           </div>
         </div>
         <!-- End Check -->
@@ -129,10 +129,10 @@
           <div class="form-check form-check-label-highlighter text-center">
             <input type="radio" class="form-check-input" name="sidebarNavOptions" id="sidebarNavOptions2" value="tabs">
             <label class="form-check-label mb-2" for="sidebarNavOptions2">
-              <img class="form-check-img" src="assets/svg/layouts-light/demo-layouts-nav-tabs.svg" alt="Image Description" data-hs-theme-appearance="dark">
-              <img class="form-check-img" src="assets/svg/layouts/demo-layouts-nav-tabs.svg" alt="Image Description" data-hs-theme-appearance="default">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts-light/demo-layouts-nav-tabs.svg") }}" alt="Image Description" data-hs-theme-appearance="dark">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts/demo-layouts-nav-tabs.svg") }}" alt="Image Description" data-hs-theme-appearance="default">
             </label>
-            <span class="form-check-text">Tabs</span>
+            <span class="form-check-text">Onglets</span>
           </div>
         </div>
         <!-- End Check -->
@@ -144,8 +144,8 @@
       <!-- Form Switch -->
       <label class="row form-check form-switch mb-3" for="builderFluidSwitch">
         <span class="col-10 ms-0">
-          <span class="d-block h4 mb-1">Header Layout Options</span>
-          <span class="d-block fs-5">Toggle to container-fluid layout</span>
+          <span class="d-block h4 mb-1">Options de mise en page de l'en-tête</span>
+          <span class="d-block fs-5">Basculer vers la disposition conteneur-fluide</span>
         </span>
         <span class="col-2 text-end">
           <input type="checkbox" class="form-check-input" id="builderFluidSwitch">
@@ -159,10 +159,10 @@
           <div class="form-check form-check-label-highlighter text-center">
             <input type="radio" class="form-check-input" name="layout" id="headerLayoutOptions1" value="single-header">
             <label class="form-check-label mb-2" for="headerLayoutOptions1">
-              <img class="form-check-img" src="assets/svg/layouts/header-default-container.svg" alt="Image Description" data-hs-theme-appearance="default">
-              <img class="form-check-img" src="assets/svg/layouts-light/header-default-container.svg" alt="Image Description" data-hs-theme-appearance="dark">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts/header-default-container.svg") }}" alt="Image Description" data-hs-theme-appearance="default">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts-light/header-default-container.svg") }}" alt="Image Description" data-hs-theme-appearance="dark">
             </label>
-            <span class="form-check-text">Default</span>
+            <span class="form-check-text">Defaut</span>
           </div>
         </div>
         <!-- End Check -->
@@ -172,10 +172,10 @@
           <div class="form-check form-check-label-highlighter text-center">
             <input type="radio" class="form-check-input" name="layout" id="headerLayoutOptions2" value="double-header">
             <label class="form-check-label mb-2" for="headerLayoutOptions2">
-              <img class="form-check-img" src="assets/svg/layouts/header-double-line-container.svg" alt="Image Description" data-hs-theme-appearance="default">
-              <img class="form-check-img" src="assets/svg/layouts-light/header-double-line-container.svg" alt="Image Description" data-hs-theme-appearance="dark">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts/header-double-line-container.svg") }}" alt="Image Description" data-hs-theme-appearance="default">
+              <img class="form-check-img" src="{{ asset("dashboard/assets/svg/layouts-light/header-double-line-container.svg") }}" alt="Image Description" data-hs-theme-appearance="dark">
             </label>
-            <span class="form-check-text">Double line</span>
+            <span class="form-check-text">Double ligne</span>
           </div>
         </div>
         <!-- End Check -->
@@ -189,7 +189,7 @@
         <div class="col">
           <div class="d-grid">
             <button type="button" id="js-builder-reset" class="btn btn-white btn-lg">
-              <i class="bi-arrow-counterclockwise"></i> Reset
+              <i class="bi-arrow-counterclockwise"></i> Réinitialiser
             </button>
           </div>
         </div>
@@ -198,7 +198,7 @@
         <div class="col">
           <div class="d-grid">
             <button type="button" id="js-builder-preview" class="btn btn-primary btn-lg">
-              <i class="eye-visible"></i> Preview
+              <i class="eye-visible"></i> aperçu
             </button>
           </div>
         </div>
@@ -209,10 +209,11 @@
     <!-- End Footer -->
   </div>
 
+
   <!-- Builder Toggle -->
   <div id="builderOffcanvas" class="position-fixed bottom-0 end-0 me-5 mb-5" style="z-index: 3;" data-bs-toggle="offcanvas" data-bs-target="#offcanvasBuilder" aria-controls="offcanvasBuilder">
     <a class="btn btn-dark btn-lg" href="javascript:;">
-      <i class="bi-sliders fs-6 me-2"></i> Customize
+      <i class="bi-sliders fs-6 me-2"></i> Personnaliser
     </a>
   </div>
 

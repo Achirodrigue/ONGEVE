@@ -12,22 +12,6 @@
         <div class="row align-items-center mb-3">
           <div class="col-sm mb-2 mb-sm-0">
             <h1 class="page-header-title">Nombre de devis en cours <span class="badge bg-soft-dark text-dark ms-2">{{ $clientdevis->count() }}</span></h1>
-
-            <!-- <div class="mt-2">
-              <a class="text-body me-3" href="javascript:;" data-bs-toggle="modal" data-bs-target="#exportProductsModal">
-                <i class="bi-download me-1"></i> Export
-              </a>
-              <a class="text-body" href="javascript:;" data-bs-toggle="modal" data-bs-target="#importProductsModal">
-                <i class="bi-upload me-1"></i> Import
-              </a>
-            </div> -->
-          </div>
-          <!-- End Col -->
-
-          <div class="col-auto">
-            <a class="btn btn-primary" href="{{ route('commercial.devis.particulier.encours') }}">
-              <i class="bi-eye me-1"></i> Devis Entreprise en cours
-            </a>
           </div>
           <!-- End Col -->
         </div>
@@ -60,7 +44,7 @@
       <!-- End Row -->
 
       <!-- Card -->
-      <div class="card">
+      <div class="card card-table">
           @if($clientdevis->count() > 0)
             <!-- Header -->
             <div class="card-header card-header-content-md-between">
@@ -99,26 +83,86 @@
                  }'>
                 <thead class="thead-light">
                   <tr>
-                    <th>N° devis</th>
+                    <th>N°</th>
+                    <th>Type facture</th>
+                    <th>N° facture</th>
                     <th>Date</th>
                     <th>Nom</th>
                     <th>Tva</th>
                     <th>Frais</th>
                     <th>Total à payer</th>
-                    <th>Infos devis</th>
+                    <th>Déjà payer</th>
+                    <th>Détails</th>
+                    <th>Bon commande</th>
+                    <th>Infos facture</th>
                     <th>Actions</th>
+                    <th>N°</th>
                   </tr>
                 </thead>
 
                 <tbody>
+                  @php $n=1; @endphp
                   @foreach($clientdevis as $clientdevis)
+                    @php $a=$n; @endphp
                     <tr>
+                      <td class="fw-bold">{{ $n++ }}</td>
+                      <td>
+                        <div class="btn-group" role="group">
+                          <a class="btn @if($clientdevis->TDF == null) btn-secondary @elseif($clientdevis->TDF == 1) btn-warning @else btn-danger @endif btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#deleteClientDevis{{ $clientdevis->id }}">
+                            @if($clientdevis->TDF == null) Vente @elseif($clientdevis->TDF == 1) Location @else Prestation @endif
+                          </a>
+                        </div>
+                      </td>
                       <td class="fw-bold">{{ $clientdevis->numero_devis }}</td>
-                      <td class="fw-bold">{{ $clientdevis->created_at->format('d/m/Y H;i') }}</td>
+                      <td class="fw-bold">{{ $clientdevis->updated_at->format('d/m/Y H:i') }}</td>
                       <td class="fw-bold">{{ $clientdevis->client->nom }}</td>
                       <td class="fw-bold">{{ getprice($clientdevis->tva) }}F</td>
-                      <td class="fw-bold">{{ getprice($clientdevis->frais) }}F</td>
-                      <td class="fw-bold">{{ getprice($clientdevis->total_ttc + $clientdevis->frais + $clientdevis->tva) }}F</td>
+                      <td class="text-center fw-bold">
+                        <div class="btn-group" role="group">
+                          <a class="btn btn-white btn-sm" href="#">
+                              <i class="bi-eye me-1"></i> {{ getpricefr($clientdevis->frais) }}
+                          </a>
+                        </div>
+                      </td>
+                      <td class="fw-bold">{{ getprice($clientdevis->total_payer) }}F</td>
+                      <td class="fw-bold">{{ getprice($clientdevis->versement) }}F</td>
+                      <td class="text-center">
+                        <div class="btn-group" role="group">
+                          <a class="btn btn-white btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#infoClientdevis{{ $clientdevis->id }}">
+                              <i class="bi-eye me-1"></i>
+                          </a>
+                        </div>
+                      </td>
+                      <td class="text-center">
+                        <div class="btn-group" role="group">
+                          @if($clientdevis->clientdevisbon)
+                            <a class="btn btn-white btn-sm" target="_blank" href="{{ asset(Storage::url($clientdevis->clientdevisbon->bon)) }}">
+                              <i class="bi-eye me-1"></i> Voir
+                            </a>
+                          @else
+                            <a class="btn btn-white btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#adddevisbon{{ $clientdevis->id }}">
+                              <i class="bi-printer me-1"></i> Associer
+                            </a>
+                          @endif
+                        </div>
+                      </td>
+                      <td>
+                        @php 
+                          $produit = null;
+                          $prestation = null;
+                          if($clientdevis->TDF != 2) { if($clientdevis->clientdevisprods->count() > 0) { $produit = 1; } }
+                          else { if($clientdevis->clientdevisprestations->count() > 0) { $prestation = 1; } }
+                        @endphp
+                        @if($produit || $prestation)
+                          <div class="btn-group" role="group">
+                            <a class="btn btn-white btn-sm" href="{{ route('commercial.devis.client.finalite', $clientdevis) }}">
+                              <i class="bi-printer me-1"></i> Details
+                            </a>
+                          </div>
+                        @else
+                          Aucune prestation
+                        @endif
+                      </td>
                       <td>
                         <div class="btn-group" role="group">
                           <a class="btn btn-white btn-sm" href="#">
@@ -130,14 +174,25 @@
                             <button type="button" class="btn btn-white btn-icon btn-sm dropdown-toggle dropdown-toggle-empty" id="productsEditDrop{{ $clientdevis->id }}down" data-bs-toggle="dropdown" aria-expanded="true"></button>
 
                             <div class="dropdown-menu dropdown-menu-top mt-1" aria-labelledby="productsEditDrop{{ $clientdevis->id }}down">
-                              <a class="dropdown-item" href="{{ route('commercial.devis.client.create.deux', $clientdevis) }}">
-                                <i class="bi-pencil-fill me-1 dropdown-item-icon"></i> Produit
-                              </a>
-                              <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editClientDevis{{ $clientdevis->id }}">
+                              <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#editclientdevis{{ $clientdevis->id }}">
                                 <i class="bi-pencil-fill me-1 dropdown-item-icon"></i> Devis
                               </a>
-                              @if($clientdevis->clientdevisprods()->count() > 0)
-                                <a class="dropdown-item" href="{{ route('commercial.devis.client.finalite', $clientdevis) }}">
+                              <a  class="dropdown-item"
+                                  @if($clientdevis->TDF == 2)
+                                    href="{{ route('commercial.devis.client.create.deux.prestation', $clientdevis) }}">
+                                  @else
+                                    href="{{ route('commercial.devis.client.create.deux', $clientdevis) }}">
+                                  @endif
+                                <i class="bi-pencil-fill me-1 dropdown-item-icon"></i>Modifier les @if($clientdevis->TDF == 2) prestations @else produits @endif
+                              </a>
+                              @php 
+                                $produit = null;
+                                $prestation = null;
+                                if($clientdevis->TDF != 2) { if($clientdevis->clientdevisprods->count() > 0) { $produit = 1; } }
+                                else { if($clientdevis->clientdevisprestations->count() > 0) { $prestation = 1; } }
+                              @endphp
+                              @if($produit || $prestation)   
+                              <a class="dropdown-item" href="{{ route('commercial.devis.client.finalite', $clientdevis) }}">
                                   <i class="bi-printer me-1 dropdown-item-icon"></i> Finalité
                                 </a>
                                 <a class="dropdown-item" href="{{ route('pdf.devis.commande.client', $clientdevis) }}" target="_blank">
@@ -147,20 +202,17 @@
                                   <i class="bi-share-fill dropdown-item-icon"></i> Convertir en commande
                                 </a>
                               @endif
+                                <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#deleteclientdevis{{ $clientdevis->id }}">
+                                  <i class="bi-trash dropdown-item-icon"></i>Supprimer le devis
+                                </a>
                             </div>
                           </div>
                           <!-- End Button Group -->
                         </div>
                       </td>
-                      <td>
-                        <div class="btn-group" role="group">
-                          <a class="btn btn-white btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#deleteClientDevis{{ $clientdevis->id }}">
-                            <i class="bi-trash dropdown-item-icon"></i>
-                          </a>
-                        </div>
-                      </td>
+                      <td class="fw-bold">{{ $a }}</td>
                     </tr>
-                    @include('include.devis-client')
+                    @include('include.CG.clientdevis')
                   @endforeach
                 </tbody>
               </table>
@@ -172,7 +224,7 @@
               <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
                 <div class="col-sm mb-2 mb-sm-0">
                   <div class="d-flex justify-content-center justify-content-sm-start align-items-center">
-                    <span class="me-2">Showing:</span>
+                    <span class="me-2">Pagination :</span>
 
                     <!-- Select -->
                     <div class="tom-select-custom">

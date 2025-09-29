@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('produitses', function (Blueprint $table) {
             $table->id();
-            $table->string('quantite');
+            $table->string('quantite')->nullable();
             $table->boolean("entree_sortie")->default(1);
             $table->foreignId('produit_id')->constrained()->onDelete('cascade');
             $table->timestamps();

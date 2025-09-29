@@ -94,6 +94,7 @@
                     <li>
                       <i class="bi-building dropdown-item-icon"></i> 
                       Role: <span class="text-danger">@if(auth()->user()->role) Responsable commercial @else Commercial @endif</span> </li>
+                      @if(!auth()->user()->role) Plafond Remise: <span class="text-danger"> {{ auth()->user()->premise }} </span> </li> @endif
                     <!-- <li><i class="bi-briefcase dropdown-item-icon"></i> No department</li>
                      -->
 

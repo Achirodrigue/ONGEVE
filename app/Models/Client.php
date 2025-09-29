@@ -13,11 +13,23 @@ class Client extends Model
         'nom',
         'contact',
         'email',
+        'NCC',
+        'reference',
         'Pachat',
         'adresse_postale',
         'TC',
+        'PachatStatut',
+        'isvalide',
+        'etat',
         'commercial_id',
     ];
+
+    //
+        public function clientcomptebanks()
+        {
+            return $this->hasMany('App\Models\Clientcomptebank');
+        }
+    //
 
     //commercial
         public function commercial()

@@ -13,10 +13,10 @@ class Categorie extends Model
         'nom',
     ];
 
-    //Produit
-        public function produits()
+    //entrepotcategs
+        public function entrepotcategs()
         {
-            return $this->hasMany('App\Models\Produit');
+            return $this->hasMany('App\Models\Entrepotcateg');
         }
     //
 }

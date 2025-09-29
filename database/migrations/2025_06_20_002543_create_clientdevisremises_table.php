@@ -16,11 +16,10 @@ return new class extends Migration
             $table->string('date');
             $table->string('remise');
             $table->string('prix_remise');
-            $table->longText('motif');
             $table->boolean("TR")->default(0);
             $table->foreignId('clientdevis_id')->nullable()->constrained()->onDelete('set null');
             $table->foreignId('clientdevisprod_id')->nullable()->constrained()->onDelete('set null');
-            $table->foreignId('commercial_id')->constrained()->onDelete('cascade');
+            $table->foreignId('commercial_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

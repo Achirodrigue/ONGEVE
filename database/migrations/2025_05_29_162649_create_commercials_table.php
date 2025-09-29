@@ -17,9 +17,12 @@ return new class extends Migration
             $table->string('prenom');
             $table->string('contact');
             $table->string('email')->unique();
+            $table->string('premise')->nullable();
             $table->boolean("isvalide")->default(1);
+            $table->boolean("statut")->default(0);
             $table->string('photo')->nullable();
             $table->boolean("role")->default(0);
+            $table->string('connexion');
             $table->string('identifiant')->unique();
             $table->string('password')->unique();
             $table->timestamps();

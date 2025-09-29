@@ -38,7 +38,7 @@
 
 
       <!-- Card -->
-      <div class="card">
+      <div class="card card-table">
           @if($commercials->count() > 0)
             <!-- Header -->
             <div class="card-header card-header-content-md-between">
@@ -77,25 +77,50 @@
                  }'>
                 <thead class="thead-light">
                   <tr>
+                    <th>N°</th>
                     <th>Nom</th>
                     <th>Prénom</th>
                     <th>email</th>
                     <th>Contact</th>
                     <th>Identifiant</th>
+                    <th>Bilan</th>
                     <th>Actions</th>
-                    
                   </tr>
                 </thead>
 
                 <tbody>
+                  @php $n=1; @endphp
                   @foreach($commercials as $commercial)
                     <tr>
+                      <td class="fw-bold">{{ $n++ }}</td>
                       <td class="fw-bold">{{ $commercial->nom }}</td>
                       <td class="fw-bold">{{ $commercial->prenom }}</td>
                       <td class="fw-bold">{{ $commercial->email }}</td>
                       <td class="fw-bold">{{ $commercial->contact }}</td>
                       <td class="fw-bold">{{ $commercial->identifiant }}</td>             
                       <!-- <td class="fw-bold">{{ auth()->user()->nom }}</td>                 -->
+                      <td>
+                        <div class="btn-group" role="group">
+                          <a class="btn btn-white btn-sm" href="#">
+                            Derouler
+                          </a>
+
+                          <!-- Button Group -->
+                          <div class="btn-group">
+                            <button type="button" class="btn btn-white btn-icon btn-sm dropdown-toggle dropdown-toggle-empty" id="productsEditDrop{{ $commercial->id }}down" data-bs-toggle="dropdown" aria-expanded="true"></button>
+
+                            <div class="dropdown-menu dropdown-menu-top mt-1" aria-labelledby="productsEditDrop{{ $commercial->id }}down">
+                              <a class="dropdown-item" href="{{ route('commercial.commercial.statistique', $commercial) }}">
+                                <i class="bi-eye me-1 dropdown-item-icon"></i> Apports
+                              </a>
+                              <a class="dropdown-item" href="{{ route('commercial.commercial.statistique.annee', $commercial) }}">
+                                <i class="bi-eye me-1 dropdown-item-icon"></i> Statistique
+                              </a>
+                            </div>
+                          </div>
+                          <!-- End Button Group -->
+                        </div>
+                      </td>
                       <td>
                         <div class="btn-group" role="group">
                           <a class="btn btn-white btn-sm" href="#" data-bs-toggle="modal" data-bs-target="#editcommercial{{ $commercial->id }}">
@@ -223,7 +248,7 @@
               </div>
               <div class="col-sm">
                 <label for="contact" class="visually-hidden form-label">Contact</label>
-                <input type="number" name="contact" required minlength="8" value="{{ old('contact') }}" class="form-control" id="contact" placeholder="Entrer un contact" aria-label="Entrer un contact">
+                <input type="text" name="contact" required minlength="8" value="{{ old('contact') }}" class="form-control" id="contact" placeholder="Entrer un contact" aria-label="Entrer un contact">
                 @error('contact') <span class="text-danger">{{ $message }}</span> @enderror
               </div>
             </div>
@@ -239,6 +264,20 @@
                 <label for="email" class="visually-hidden form-label">Email</label>
                 <input type="email" name="email" required value="{{ old('email') }}" class="form-control" id="email" placeholder="Entrer un email" aria-label="Entrer un email">
                 @error('email') <span class="text-danger">{{ $message }}</span> @enderror
+              </div>
+            </div>
+            
+            <div class="row mb-4">
+              <div class="col-sm-3 mb-2 mb-sm-0">
+                <div class="d-flex align-items-center mt-2">
+                  <i class="bi-list-ul nav-icon"></i>
+                  <div class="flex-grow-1">Plafond remise</div>
+                </div>
+              </div>
+              <div class="col-sm">
+                <label for="premise" class="visually-hidden form-label">Plafond remise</label>
+                <input type="number" min="1" name="premise" required value="{{ old('premise') }}" class="form-control" id="premise" placeholder="Entrer un plafond de remise">
+                @error('premise') <span class="text-danger">{{ $message }}</span> @enderror
               </div>
             </div>
             

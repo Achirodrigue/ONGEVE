@@ -14,17 +14,18 @@ return new class extends Migration
         Schema::create('produits', function (Blueprint $table) {
             $table->id();
             $table->string('nom');
-            // $table->string('image');
-            $table->string('description');
-            $table->string('prix');
-            $table->string('promo')->nullable();
-            $table->boolean("stock")->default(0);
-            $table->string('qtyStock');
-            $table->string('reference');
-            $table->boolean("isvalide")->default(0);
-            $table->string("etat")->nullable();
-            $table->boolean("mvente");
-            $table->foreignId('categorie_id')->constrained()->onDelete('cascade');
+            $table->longText('description')->nullable();
+            $table->string('prix')->nullable();
+            $table->string('qtyStock')->nullable();
+            $table->string('qtyC')->nullable();
+            $table->string('reference')->nullable();
+            $table->boolean("TP")->default(0);
+            $table->string("famille")->nullable();
+            $table->string("reff")->nullable();
+            $table->string("unite")->nullable();
+            $table->string("image")->nullable();
+            $table->foreignId('entrepotcateg_id')->constrained()->onDelete('cascade');
+            $table->foreignId('fournisseur_id')->nullable()->constrained()->onDelete('set null');
             $table->timestamps();
         });
     }

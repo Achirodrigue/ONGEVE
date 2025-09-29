@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 
 <!-- Mirrored from htmlstream.com/preview/front-dashboard-v2.1.1/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 01 Nov 2024 10:27:09 GMT -->
 <head>
@@ -33,18 +33,12 @@
       transition: unset !important;
     }
 
-    body
-    {
-      opacity: 0;
-    }
+
   </style>
 
   <!-- ONLY DEV -->
   <style>
-    body
-    {
-      opacity: 0;
-    }
+
   </style>
   <!-- END ONLY DEV -->
 

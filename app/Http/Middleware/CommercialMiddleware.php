@@ -27,7 +27,7 @@ class CommercialMiddleware
                 return redirect()->route('commercial.login')->with('error',$error);
             }
         }
-        else if (Auth()->check())
+        elseif (Auth()->check())
         {
             if (Auth()->user()->isvalide === 1)
             {

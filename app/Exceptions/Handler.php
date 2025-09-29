@@ -55,10 +55,18 @@ class Handler extends ExceptionHandler
             return redirect()->guest(route('magasinier.login'));
         }
 
-        if ($request->is('logistique') || $request->is('logistique/*')) {
-            return redirect()->guest(route('logistique.login'));
+        if ($request->is('pack/auto') || $request->is('pack/auto/*')) {
+            return redirect()->guest(route('packauto.login'));
         }
 
-        return redirect()->guest(route('logistique.login'));
+        if ($request->is('gestionnnaire/stock') || $request->is('gestionnnaire/stock/*')) {
+            return redirect()->guest(route('geststock.login'));
+        }
+
+        if ($request->is('secretaire') || $request->is('secretaire/*')) {
+            return redirect()->guest(route('secretaire.login'));
+        }
+
+        return redirect()->guest(route('secretaire.login'));
     }
 }

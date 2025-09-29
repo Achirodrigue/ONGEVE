@@ -4,11 +4,16 @@ namespace App\Http\Controllers\Commercial;
 
 use App\Models\Client;
 use App\Models\Produit;
+use App\Models\Clientinfo;
 use App\Models\Clientdevis;
 use App\Models\Particulier;
+use App\Models\Clientremise;
 use Illuminate\Http\Request;
+use App\Models\Clientdevisinfo;
 use App\Models\Clientdevisprod;
 use App\Models\Particulierdevis;
+use App\Models\Clientdevisremise;
+use App\Models\Particulierremise;
 use App\Http\Controllers\Controller;
 use App\Models\Particulierdevisprod;
 use Illuminate\Support\Facades\Storage;
@@ -28,70 +33,139 @@ class CommercialDevisController extends Controller
                 // 'date_expiration' => 'required|min:2',
                 // 'condition_validite' => 'required|min:2',
                 // 'mode_paiement' => 'required|min:2',
-                'delai_livraison' => 'required|min:2',
+                // 'delai_livraison' => 'required|min:2',
                 // 'note_condition' => 'required|min:2',
-                'frais' => 'required|min:2',
+                // 'frais' => 'required|min:2',
             ]);
-            // dd($request->client);
+            // dd($request->client, $request->clients);
 
             //données
                 $total_ttc = 0;
                 $tva = 0; //18%
+                $delai_livraison = null;
+                $frais = null;
             //
 
             if($request->client === "Nouveau")
             {
                 $this->validate($request, [
                     'nom' => 'required|min:2',
-                    'prenom' => 'required|min:2',
-                    'genre' => 'required|min:4',
-                    'naissance' => 'required|min:8',
                     'adresse_postale' => 'required|min:2',
                     'contact' => 'required|unique:clients|min:8|max:12',
                     'email' => 'required|email|unique:clients|min:8',
                 ]);
-
+                
                 $client = Client::create([
                     'nom' => $request->nom,
-                    'prenom' => $request->prenom,
-                    'genre' => $request->genre,
-                    'naissance' => $request->naissance,
-                    'contact' => $request->contact ,
                     'email' => $request->email ,
+                    'contact' => $request->contact ,
+                    'Pachat' => $request->Pachat,
                     'adresse_postale' => $request->adresse_postale,
+                    'TC' => $request->TC,
                     'commercial_id' => auth()->user()->id,
                 ]);
+
+                if($request->TC === "0")
+                {
+                    $this->validate($request, [
+                        'forme_juridique' => 'required|min:2',
+                        'numero_identifie' => 'required|min:2',
+                        'domaine' => 'required|min:2',
+                        'siege_social' => 'required|min:2',
+                    ]);
+
+                    $clientinfo = Clientinfo::create([
+                        'genre' => null,
+                        'naissance' => null,
+                        'forme_juridique' => $request->forme_juridique,
+                        'numero_identifie' => $request->numero_identifie,
+                        'domaine' => $request->domaine,
+                        'siege_social' => $request->siege_social,
+                        'client_id' => $client->id,
+                    ]);
+                }else{
+                    $this->validate($request, [
+                        'genre' => 'required|min:4',
+                        'naissance' => 'required|min:8',
+                    ]);
+
+                    $clientinfo = Clientinfo::create([
+                        'genre' => $request->genre,
+                        'naissance' => $request->naissance,
+                        'forme_juridique' => null,
+                        'numero_identifie' => null,
+                        'domaine' => null,
+                        'siege_social' => null,
+                        'client_id' => $client->id,
+                    ]);
+                }
             }
             else
             {
-                $client = Client::findOrfail($request->client)->first();
+                $this->validate($request, [
+                    'clients' => 'required|min:1',
+                ]);
+                $client = Client::findOrfail($request->clients)->first();
             }
 
             // Génération de la référence
-            $nom = strtoupper(substr(self::removeAccents($client->nom), 0, 3));
-            $prenom = strtoupper(substr(self::removeAccents($client->prenom), 0, 3));
+            $nom = strtoupper(substr(removeAccents($client->nom), 0, 3));
+            $contact = strtoupper(substr(removeAccents($client->contact), 0, 3));
             $lastClientdevis = Clientdevis::orderBy('id', 'desc')->first();
             $lastNumber = $lastClientdevis ? $lastClientdevis->id : 0;
-            $numero_devis = "{$nom}-{$prenom}-{$lastNumber}";
+            $numero_devis = "{$nom}-{$contact}-{$lastNumber}";
+
             // dd($tva);
             $clientdevis = Clientdevis::create([
                 'numero_devis' => $numero_devis ,
-                'delai_livraison' => $request->delai_livraison,
                 'tva' => $tva ,
-                'total_ttc' => $total_ttc ,
                 'frais' => $request->frais,
-                'etat' => null ,
-                'isvalide' => 1 ,
+                'total_ttc' => $total_ttc ,
+                'delai_livraison' => $request->delai_livraison,
+                'remise' => null ,
+                'motif' => null ,
+                'TD' => $request->TD ,
                 'client_id' => $client->id ,
                 'commercial_id' => auth()->user()->id,
             ]);
 
-            $noms = "$client->nom $client->prenom" ;
+            if($request->TD === "0")
+            {
+                $clientdevisinfo = Clientdevisinfo::create([
+                    'isvalide' => 0,
+                    'livraison' => 0,
+                    'paye' => 0,
+                    'etat' => null,
+                    'motif_rejet' => null,
+                    'debut' => null,
+                    'fin' => null,
+                    'clientdevis_id' => $clientdevis->id,
+                ]);
+            }else{
+                $this->validate($request, [
+                    'debut' => 'required|min:4',
+                    'fin' => 'required|min:4',
+                ]);
+
+                $clientdevisinfo = Clientdevisinfo::create([
+                    'isvalide' => 0,
+                    'livraison' => 0,
+                    'paye' => 0,
+                    'etat' => null,
+                    'motif_rejet' => null,
+                    'debut' => $request->debut,
+                    'fin' => $request->fin,
+                    'clientdevis_id' => $clientdevis->id,
+                ]);
+            }
+
+            $noms = $client->nom ;
                 
             return redirect()->route('commercial.devis.client.create.deux', compact('clientdevis'))->with('success', "$noms : devis ajouté avec succès");
         }
         public function devisClientCreateDeux(Clientdevis $clientdevis)
         {
+            // dd(date('d/m/Y H:i'));
             return view('dashboard.commercial.devis.client.add-devis-client-deux', compact('clientdevis'));
         }
         public function devisClientStoreDeux(Request $request, Clientdevis $clientdevis, Produit $produit)
@@ -100,25 +174,48 @@ class CommercialDevisController extends Controller
             {
                 if($clientdevisprod->produit->id == $produit->id)
                 {
-                    // dd(1);
                     return back()->with('success', "Le produit $produit->nom à déjà été ajouté à cet devis");
                 }
             }
-                    // dd($clientdevis->clientdevisprods()->count(), $produit->nom);
 
             $this->validate($request, [
                 'quantite'   => 'required|min:1',
             ]);
 
+            // dd(5);
+            
             //données
-                $prix_total = $request->quantite * $produit->prix;
+                $prix = $produit->prix;
+                if(!empty($request->remise))
+                {
+                    $this->validate($request, [
+                        'remise'   => 'required|min:1|max:100',
+                        'motif'   => 'required|min:10',
+                    ]);
+                    //données
+                        $date = date('d/m/Y H:i');
+                        $prixNA = $produit->prix - ($request->remise * ($produit->prix/100));
+                        $prixR = round($prixNA);
+                        $prix = (int)($prixR);
+                    //
+                }
+
+                $prix_total = $request->quantite * $prix;
                 $total_ttc = $clientdevis->total_ttc + $prix_total;
+                $tva = (int)($total_ttc * (18/100));
             //
+
+            // dd($prix_total, $total_ttc, $clientdevis->total_ttc);
+
+            $clientdevisTTC = ClientCommandeImpaye($clientdevis->client);
+            if (($prix_total + $clientdevisTTC) > $clientdevis->client->Pachat) {
+                return back()->with('message', "Ce client dépasse son plafond d'achat autorisé.");
+            }
 
             $clientdevisprod = Clientdevisprod::create([
                 'quantite' => $request->quantite ,
                 'unite' => "aucune",
-                'prix_unitaire' => $produit->prix ,
+                'prix_unitaire' => $prix ,
                 'prix_total' => $prix_total,
                 'clientdevis_id' => $clientdevis->id,
                 'produit_id' => $produit->id ,
@@ -126,25 +223,39 @@ class CommercialDevisController extends Controller
 
             $clientdevis->update([
                 'total_ttc' => $total_ttc ,
+                'tva' => $tva ,
             ]);
 
-            $noms = $clientdevis->client->nom." ".$clientdevis->client->prenom;
-                
+            if(!empty($request->remise))
+            {
+                $clientdevisremise = Clientdevisremise::create([
+                    'date' => $date ,
+                    'remise' => $request->remise,
+                    'prix_remise' => $prix ,
+                    'motif' => $request->motif ,
+                    'TR' => 1 ,
+                    'clientdevis_id' => null,
+                    'clientdevisprod_id' => $clientdevisprod->id,
+                    'commercial_id' => auth()->user()->id ,
+                ]);
+            }
+
+            $noms = $clientdevis->client->nom ;               
             return back()->with('success', "Produit $produit->nom Ajouté au devis de $noms avec succès");
         }
-        public function devisProduitPrixUpdate(Request $request, Produit $produit)
-        {
-            $this->validate($request, [
-                'prix' => 'required|min:2',
-            ]);
+        // public function devisProduitPrixUpdate(Request $request, Clientdevisprod $clientdevisprod)
+        // {
+        //     $this->validate($request, [
+        //         'prix' => 'required|min:2',
+        //     ]);
 
-            $produit->update([
-                'prix' => $request->prix,
-            ]);
+        //     $produit->update([
+        //         'prix' => $request->prix,
+        //     ]);
 
-            $noms = $produit->nom;
-            return back()->with('success', "$noms : prix modifié avec succès");
-        }
+        //     $noms = $produit->nom;
+        //     return back()->with('success', "$noms : prix modifié avec succès");
+        // }
         public function devisProduitQtyUpdate(Request $request, Clientdevisprod $clientdevisprod)
         {
             $this->validate($request, [
@@ -153,18 +264,80 @@ class CommercialDevisController extends Controller
 
             //données
                 $noms = $clientdevisprod->produit->nom;
-                $prix_total = $request->quantite * $clientdevisprod->produit->prix;
+
+                $prix = $clientdevisprod->prix_unitaire;
+
+                if($clientdevisprod->clientdevisremise)
+                {
+                    $this->validate($request, [
+                        'remise'   => 'required|min:1|max:100',
+                        'motif'   => 'required|min:10',
+                    ]);
+
+                    $prix = $clientdevisprod->clientdevisremise->prix_remise;
+                }
+
+                if(!empty($request->remise))
+                {
+                    $this->validate($request, [
+                        'remise'   => 'required|min:1|max:100',
+                        'motif'   => 'required|min:10',
+                    ]);
+
+                    //données
+                        $date = date('d/m/Y H:i');
+                        $prixNA = $clientdevisprod->produit->prix - ($request->remise * ($clientdevisprod->produit->prix/100));
+                        $prix = round($prixNA);
+                    //
+                }
+
+                // dd($prix);
+
+                $prix_total = $request->quantite * $prix;
                 $total_ttc = $clientdevisprod->clientdevis->total_ttc + $prix_total - $clientdevisprod->prix_total;
+                $tva = (int)($total_ttc * (18/100));
             //
 
             $clientdevisprod->update([
                 'quantite' => $request->quantite ,
+                'prix_unitaire' => $prix ,
                 'prix_total' => $prix_total,
             ]);
 
             $clientdevisprod->clientdevis->update([
                 'total_ttc' => $total_ttc ,
+                'tva' => $tva ,
             ]);
+            
+            if($clientdevisprod->clientdevisremise)
+            {
+                if($clientdevisprod->clientdevisremise->TR)
+                {
+                    $clientdevisprod->clientdevisremise->update([
+                        'date' => $date ,
+                        'remise' => $request->remise,
+                        'prix_remise' => $prix ,
+                        'motif' => $request->motif ,
+                        'commercial_id' => auth()->user()->id ,
+                    ]);
+                }
+            }
+            else
+            {
+                if(!empty($request->remise))
+                {
+                    $clientdevisremise = Clientdevisremise::create([
+                        'date' => $date ,
+                        'remise' => $request->remise,
+                        'prix_remise' => $prix ,
+                        'motif' => $request->motif ,
+                        'TR' => 1 ,
+                        'clientdevis_id' => null,
+                        'clientdevisprod_id' => $clientdevisprod->id,
+                        'commercial_id' => auth()->user()->id ,
+                    ]); 
+                }
+            }
                 
             return back()->with('success', "Quantité du produit $noms modifié avec succès");
         }
@@ -173,10 +346,12 @@ class CommercialDevisController extends Controller
             //données
                 $produit = $clientdevisprod->produit->nom ;
                 $total_ttc = $clientdevisprod->clientdevis->total_ttc - $clientdevisprod->prix_total;
+                $tva = (int)($total_ttc * (18/100));
             //
             
             $clientdevisprod->clientdevis->update([
                 'total_ttc' => $total_ttc ,
+                'tva' => $tva ,
             ]);
 
             $clientdevisprod->delete();
@@ -195,14 +370,16 @@ class CommercialDevisController extends Controller
             $this->validate($request, [
                 'client' => 'required|min:1',
 
-                'delai_livraison' => 'required|min:2',
-                'frais' => 'required|min:2',
+                // 'delai_livraison' => 'required|min:2',
+                // 'frais' => 'required|min:2',
             ]);
-            // dd($request->client);
+            // dd($request->client, $request->clients);
 
             //données
                 $total_ttc = 0;
                 $tva = 0; //18%
+                $delai_livraison = null;
+                $frais = null;
             //
 
             if($request->client === "Nouveau")
@@ -232,24 +409,31 @@ class CommercialDevisController extends Controller
             }
             else
             {
-                $particulier = Particulier::findOrfail($request->client)->first();
+                $this->validate($request, [
+                    'clients' => 'required|min:1',
+                ]);
+                $particulier = Particulier::findOrfail($request->clients)->first();
             }
+            // dd($request->client, $request->clients);
 
             // Génération de la référence
-            $nom = strtoupper(substr(self::removeAccents($particulier->nom), 0, 3));
-            $email = strtoupper(substr(self::removeAccents($particulier->email), 0, 3));
+            $nom = strtoupper(substr(removeAccents($particulier->nom), 0, 3));
+            $email = strtoupper(substr(removeAccents($particulier->email), 0, 3));
             $lastParticulierdevis = Particulierdevis::orderBy('id', 'desc')->first();
             $lastNumber = $lastParticulierdevis ? $lastParticulierdevis->id : 0;
             $numero_devis = "{$nom}-{$email}-{$lastNumber}";
             // dd($tva);
-            $particulierdevis = Clientdevis::create([
+            $particulierdevis = Particulierdevis::create([
                 'numero_devis' => $numero_devis ,
-                'delai_livraison' => $request->delai_livraison,
+                'delai_livraison' => $delai_livraison,
                 'tva' => $tva ,
                 'total_ttc' => $total_ttc ,
-                'frais' => $request->frais,
+                'frais' => $frais,
                 'etat' => null ,
-                'isvalide' => 1 ,
+                'isvalide' => 0 ,
+                'livraison' => 0 ,
+                'paye' => 0 ,
+                'motif_rejet' => null ,
                 'particulier_id' => $particulier->id ,
                 'commercial_id' => auth()->user()->id,
             ]);
@@ -277,14 +461,36 @@ class CommercialDevisController extends Controller
             ]);
 
             //données
-                $prix_total = $request->quantite * $produit->prix;
+            
+            //données
+                $prix = $produit->prix;
+                if(!empty($request->remise))
+                {
+                    $this->validate($request, [
+                        'remise'   => 'required|min:1|max:100',
+                        'motif'   => 'required|min:10',
+                    ]);
+                    //données
+                        $date = date('d/m/Y H:i');
+                        $prixNA = $produit->prix - ($request->remise * ($produit->prix/100));
+                        $prix = round($prixNA);
+                    //
+                }
+
+                $prix_total = $request->quantite * $prix;
                 $total_ttc = $particulierdevis->total_ttc + $prix_total;
+                $tva = (int)($total_ttc * (18/100));
             //
+
+            $particulierdevisTTC = ParticulierCommandeImpaye($particulierdevis->particulier);
+            if (($prix_total + $particulierdevisTTC) > $particulierdevis->client->Pachat) {
+                return back()->with('error', "Cet entreprise dépasse son plafond d'achat autorisé.");
+            }
 
             $particulierdevisprod = Particulierdevisprod::create([
                 'quantite' => $request->quantite ,
                 'unite' => "aucune",
-                'prix_unitaire' => $produit->prix ,
+                'prix_unitaire' => $prix ,
                 'prix_total' => $prix_total,
                 'particulierdevis_id' => $particulierdevis->id,
                 'produit_id' => $produit->id ,
@@ -292,10 +498,22 @@ class CommercialDevisController extends Controller
 
             $particulierdevis->update([
                 'total_ttc' => $total_ttc ,
+                'tva' => $tva ,
             ]);
 
-            $noms = $particulierdevis->particulier->nom ;
-                
+            if(!empty($request->remise))
+            {
+                $particulierremise = Particulierremise::create([
+                    'date' => $date ,
+                    'remise' => $request->remise,
+                    'prix_remise' => $prix ,
+                    'motif' => $request->motif ,
+                    'particulierdevisprod_id' => $particulierdevisprod->id,
+                    'commercial_id' => auth()->user()->id ,
+                ]);
+            }
+
+            $noms = $particulierdevis->particulier->nom ; 
             return back()->with('success', "Produit $produit->nom Ajouté au devis de $noms avec succès");
         }
         public function devisParticulierProduitQtyUpdate(Request $request, Particulierdevisprod $particulierdevisprod)
@@ -306,18 +524,73 @@ class CommercialDevisController extends Controller
 
             //données
                 $noms = $particulierdevisprod->produit->nom;
-                $prix_total = $request->quantite * $particulierdevisprod->produit->prix;
+
+                $prix = $particulierdevisprod->produit->prix;
+                if($particulierdevisprod->particulierremise)
+                {
+                    $this->validate($request, [
+                        'remise'   => 'required|min:1|max:100',
+                        'motif'   => 'required|min:10',
+                    ]);
+
+                    $prix = $particulierdevisprod->particulierremise->prix_remise;
+                }
+
+                if(!empty($request->remise))
+                {
+                    $this->validate($request, [
+                        'remise'   => 'required|min:1|max:100',
+                        'motif'   => 'required|min:10',
+                    ]);
+
+                    //données
+                        $date = date('d/m/Y H:i');
+                        $prixNA = $particulierdevisprod->produit->prix - ($request->remise * ($particulierdevisprod->produit->prix/100));
+                        $prix = round($prixNA);
+                    //
+                }
+
+                $prix_total = $request->quantite * $prix;
                 $total_ttc = $particulierdevisprod->particulierdevis->total_ttc + $prix_total - $particulierdevisprod->prix_total;
+                $tva = (int)($total_ttc * (18/100));
             //
 
             $particulierdevisprod->update([
                 'quantite' => $request->quantite ,
+                'prix_unitaire' => $prix ,
                 'prix_total' => $prix_total,
             ]);
 
             $particulierdevisprod->particulierdevis->update([
                 'total_ttc' => $total_ttc ,
+                'tva' => $tva ,
             ]);
+            
+            if($particulierdevisprod->particulierremise)
+            {
+                $particulierdevisprod->particulierremise->update([
+                    'date' => $date ,
+                    'remise' => $request->remise,
+                    'prix_remise' => $prix ,
+                    'motif' => $request->motif ,
+                    'particulierdevisprod_id' => $particulierdevisprod->id,
+                    'commercial_id' => auth()->user()->id ,
+                ]);
+            }
+            else
+            {
+                if(!empty($request->remise))
+                {
+                    $particulierremise = Particulierremise::create([
+                        'date' => $date ,
+                        'remise' => $request->remise,
+                        'prix_remise' => $prix ,
+                        'motif' => $request->motif ,
+                        'particulierdevisprod_id' => $particulierdevisprod->id,
+                        'commercial_id' => auth()->user()->id ,
+                    ]); 
+                }
+            }
                 
             return back()->with('success', "Quantité du produit $noms modifié avec succès");
         }
@@ -326,10 +599,12 @@ class CommercialDevisController extends Controller
             //données
                 $produit = $particulierdevisprod->produit->nom ;
                 $total_ttc = $particulierdevisprod->particulierdevis->total_ttc - $particulierdevisprod->prix_total;
+                $tva = (int)($total_ttc * (18/100));
             //
             
             $particulierdevisprod->particulierdevis->update([
                 'total_ttc' => $total_ttc ,
+                'tva' => $tva ,
             ]);
 
             $particulierdevisprod->delete();
@@ -371,7 +646,7 @@ class CommercialDevisController extends Controller
                 $clientdevis->delete();
                 return back()->with('success', "$noms : devis supprimé avec succès");
             }
-            public function devisClientConvertirUpdate(Request $request, Clientdevis $clientdevis)
+            public function devisClientConvertirUpdate(Clientdevis $clientdevis)
             {
                 $clientdevis->update([
                     'isvalide' => !$clientdevis->isvalide,
@@ -389,12 +664,12 @@ class CommercialDevisController extends Controller
         //
 
         //particulier
-            public function devisPartenaireEncours()
+            public function devisParticulierEncours()
             {
-                $particulierdevis = Particulierdevis::where('isvalide', null)->orderBy('updated_at','desc')->get();
+                $particulierdevis = Particulierdevis::where('isvalide', 0)->orderBy('updated_at','desc')->get();
                 return view('dashboard.commercial.devis.historique.particulier.devis-encours', compact('particulierdevis'));
             }
-            public function devisParticulierFinalite(Particulierdevis $clientdevis)
+            public function devisParticulierFinalite(Particulierdevis $particulierdevis)
             {
                 return view('dashboard.commercial.devis.historique.particulier.devis-detail', compact(('particulierdevis')));
             }
@@ -420,7 +695,7 @@ class CommercialDevisController extends Controller
                 $particulierdevis->delete();
                 return back()->with('success', "$noms : devis supprimé avec succès");
             }
-            public function devisParticulierConvertirUpdate(Request $request, Particulierdevis $particulierdevis)
+            public function devisParticulierConvertirUpdate(Particulierdevis $particulierdevis)
             {
                 $particulierdevis->update([
                     'isvalide' => !$particulierdevis->isvalide,
@@ -437,278 +712,4 @@ class CommercialDevisController extends Controller
             }
         //
     //
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $clientdevis = Clientdevis::where('etat', null)->orderBy('nom','asc')->get();
-        return view('dashboard.commercial.demande-devis.all-devis-encours', compact('clientdevis'));
-    }
-    public function devisValide()
-    {
-        $clientdevis = Clientdevis::where('etat', 1)->orderBy('nom','asc')->get();
-        return view('dashboard.commercial.demande-devis.all-devis-valide', compact('clientdevis'));
-    }
-    public function devisRefuse()
-    {
-        $clientdevis = Clientdevis::where('etat', 2)->orderBy('nom','asc')->get();
-        return view('dashboard.commercial.demande-devis.all-devis-refuse', compact('clientdevis'));
-    }
-    public function devisProduit(Clientdevis $clientdevis)
-    {
-        return view('dashboard.commercial.demande-devis.devis-produit', compact('clientdevis'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    // Fonction pour supprimer les accents
-        public static function removeAccents($string)
-        {
-            return strtr(utf8_decode($string), 
-                utf8_decode('ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝŸàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ'),
-                'AAAAAAACEEEEIIIIDNOOOOOOUUUUYYaaaaaaaceeeeiiiidnoooooouuuuyy'
-            );
-        }
-    //
-    public function create()
-    {
-        return view('dashboard.commercial.demande-devis.add-devis');
-    }
-    public function store(Request $request)
-    {
-        $this->validate($request, [
-            'client' => 'required|min:1',
-
-            'date_expiration' => 'required|min:2',
-            'condition_validite' => 'required|min:2',
-            'mode_paiement' => 'required|min:2',
-            'delai_livraison' => 'required|min:2',
-            // 'note_condition' => 'required|min:2',
-            'frais' => 'required|min:2',
-        ]);
-
-        //données
-            $total_ttc = 0;
-        //
-
-        if($request->client === "Nouveau")
-        {
-            $this->validate($request, [
-                'nom' => 'required|min:2',
-                'prenom' => 'required|min:4',
-                'contact' => 'required|unique:clients|min:8|max:12',
-                'email' => 'required|email|unique:clients|min:8',
-            ]);
-            
-            //données
-                $identifiant = $request->contact;
-            //
-
-            $client = Client::create([
-                'nom' => $request->nom ,
-                'prenom' => $request->prenom ,
-                'contact' => $request->contact ,
-                'email' => $request->email ,
-                'isvalide' => 1,
-                'identifiant' => $identifiant,
-            ]);
-        }
-        else
-        {
-            $client = Client::findOrfail($request->client)->first();
-        }
-
-        // Génération de la référence
-        $prenom = $request->prenom;
-        $nom = strtoupper(substr(self::removeAccents($request->nom), 0, 3));
-        $prenom = strtoupper(substr(self::removeAccents($request->prenom), 0, 3));
-        $lastClientdevis = Clientdevis::orderBy('id', 'desc')->first();
-        $lastNumber = $lastClientdevis ? $lastClientdevis->id : 0;
-        $numero_devis = "{$nom}-{$prenom}-{$lastNumber}";
-
-        $clientdevis = Clientdevis::create([
-            'numero_devis' => $numero_devis ,
-            'date_expiration' => $request->date_expiration ,
-            'condition_validite' => $request->condition_validite ,
-            'mode_paiement' => $request->mode_paiement ,
-            'delai_livraison' => $request->delai_livraison,
-            'note_condition' => $request->note_condition,
-            'total_ttc' => $total_ttc ,
-            'frais' => $request->frais,
-            'etat' => null ,
-            'isvalide' => 1 ,
-            'client_id' => $client->id ,
-        ]);
-
-        $noms = "$client->nom $client->prenom" ;
-            
-        return redirect()->route('commercial.devis.create.deux', compact(('clientdevis')))->with('success', "$noms : devis ajouté avec succès");
-    }
-    public function devisCreateDeux(Clientdevis $clientdevis)
-    {
-        return view('dashboard.commercial.demande-devis.add-devis-deux', compact('clientdevis'));
-    }
-    public function devisStoreDeux(Request $request, Clientdevis $clientdevis, Produit $produit)
-    {
-        foreach($clientdevis->clientdevisprods as $clientdevisprod)
-        {
-            if($clientdevisprod->produit->id == $produit->id)
-            {
-                // dd(1);
-                return back()->with('success', "Le produit $produit->nom à déjà été ajouté à cet devis");
-            }
-        }
-                // dd($clientdevis->clientdevisprods()->count(), $produit->nom);
-
-        $this->validate($request, [
-            'quantite'   => 'required|min:1',
-        ]);
-
-        //données
-            $prix_total = $request->quantite * $produit->prix;
-            $total_ttc = $clientdevis->total_ttc + $prix_total;
-        //
-
-        $clientdevisprod = Clientdevisprod::create([
-            'quantite' => $request->quantite ,
-            'unite' => "aucune",
-            'prix_unitaire' => $produit->prix ,
-            'prix_total' => $prix_total,
-            'clientdevis_id' => $clientdevis->id,
-            'produit_id' => $produit->id ,
-        ]);
-
-        $clientdevis->update([
-            'total_ttc' => $total_ttc ,
-        ]);
-
-        $noms = $clientdevis->client->nom." ".$clientdevis->client->prenom;
-            
-        return back()->with('success', "Produit $produit->nom Ajouté au devis de $noms avec succès");
-    }
-
-    
-    
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Clientdevis $clientdevis)     //(string $id)
-    {
-        return view('dashboard.commercial.demande-devis.edit-devis', compact('clientdevis'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Clientdevis $clientdevis)
-    {
-        //donnée
-            $noms = "$formateur->nom $formateur->prenom" ;
-            $photo = $formateur->photo;
-        //
-        
-        $this->validate($request, [
-            'contact'   => 'required|unique:formateurs,contact,' . $formateur->id . '|min:8|max:12',
-            'email'   => 'required|email|unique:formateurs,email,' . $formateur->id . '|min:8',
-            'nom'   => 'required|min:3',
-            'prenom'   => 'required|min:4',
-            'adresse'   => 'required|min:4',
-            'domaine'   => 'required|min:4',
-        ]);
-
-        if (!empty($request->photo))
-        {
-            $this->validate($request, [
-                'photo' => 'required|mimes:png,jpg,jpeg',
-            ]);
-            
-            if($formateur->photo){Storage::disk('public')->delete($formateur->photo);}
-            $filename = time() . '.' . $request->photo->extension();
-            $photo = $request->file('photo')->storeAs(
-                'FormateurPhoto',
-                $filename,
-                'public'
-            );
-        }
-
-        $formateur->update([
-            'photo' => $photo
-        ]);
-
-        $formateur->update($request->post());
-
-        return redirect()->route('commercial.formateur.index')->with('success', "$noms modifié avec succès");
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Clientdevis $clientdevis)
-    {
-        //donnée
-            $noms = $clientdevis->client->nom." ".$clientdevis->client->prenom ;
-        //
-
-        $formateurFormation = $formateur->formationformateurs()->count();
-
-        if($formateurFormation > 0)
-        {
-            return back()->with('error','Désolé! Ce formateur possède des formations en cours donc impossible de le supprimer.');
-        }
-        else
-        {
-            if (!empty($formateur->photo))
-            {
-                Storage::disk('public')->delete($formateur->photo);
-            }
-            $formateur->delete();
-            return back()->with('success', "$noms supprimé avec succès");
-        }
-    }
 }

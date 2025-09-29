@@ -99,6 +99,7 @@
                     <th>Date Embauche</th>
                     <th>Details</th>
                     <th>Docs</th>
+                    <th>Contrats</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -125,7 +126,14 @@
                       <td>
                         <div class="btn-group" role="group">
                           <a class="btn btn-white btn-sm" href="{{ route('ressource.employedoc.show', $employe->id) }}">
-                              <i class="bi-eye me-1"></i>
+                              <i class="bi-eye me-1"></i> {{ $employe->employedocs->count() }}
+                          </a>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="btn-group" role="group">
+                          <a class="btn btn-white btn-sm" href="{{ route('ressource.employecontrat.show', $employe->id) }}">
+                              <i class="bi-eye me-1"></i> {{ $employe->employecontrats->count() }}
                           </a>
                         </div>
                       </td>

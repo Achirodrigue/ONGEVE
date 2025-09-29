@@ -10,7 +10,7 @@
       <div class="page-header">
         <div class="row align-items-center">
           <div class="col-sm mb-2 mb-sm-0">
-            <h1 class="page-header-title">Ajouter un devis pour un <span class="text-warning">Client</span></h1>
+            <h1 class="page-header-title">Ajouter un devis ou une facture pour un <span class="text-warning">Client</span></h1>
             <!-- <h4 class="page-header-title">Etape 1</h4> -->
           </div>
           <!-- End Col -->
@@ -298,15 +298,34 @@
             <div class="col-lg-4 mb-3 mb-lg-0">
               <div class="card mb-3 mb-lg-5">
                 <div class="card-header">
-                  <h4 class="card-header-title">Information du devis </h4>
+                  <h4 class="card-header-title">Information devis/facture </h4>
                 </div>
 
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-12">
                       <div class="mb-4">
-                        <label for="frais" class="form-label">Frais de livraison</label>
-                        <input type="text" class="form-control" min="1" minlength="1" name="frais" value="{{ old('frais') }}" id="frais" placeholder="Entrer les frais de livraison" required>
+                        <label for="TD" class="form-label">Type de creation</label>
+                        <div class="tom-select-custom">
+                          <select name="isvalide" class="js-select form-select" autocomplete="off" data-hs-tom-select-options='{
+                                    "searchInDropdown": false,
+                                    "hideSearch": true,
+                                    "placeholder": "Select category"
+                                  }' required>
+                            <option value="0">Devis</option>
+                            <option value="1">Facture</option>
+                          </select>
+                          @error('isvalide') <span class="text-danger"> {{ $message }} </span> @enderror
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="mb-4">
+                        <label for="frais" class="form-label">Frais de livraison (facultatif)</label>
+                        <input type="text" class="form-control" min="1" minlength="1" name="frais" value="{{ old('frais') }}" id="frais" placeholder="Entrer les frais de livraison">
                         @error('frais') <span class="text-danger"> {{ $message }} </span> @enderror
                       </div>
                     </div>
@@ -315,8 +334,8 @@
                   <div class="row">
                     <div class="col-md-12">
                       <div class="mb-4">
-                        <label for="delai_livraison" class="form-label">Délai de livraison</label>
-                        <input type="text" class="form-control" name="delai_livraison" value="{{ old('delai_livraison') }}" id="delai_livraison" placeholder="Entrer un Délai de livraison" required>
+                        <label for="delai_livraison" class="form-label">Délai de livraison (facultatif)</label>
+                        <input type="text" class="form-control" name="delai_livraison" value="{{ old('delai_livraison') }}" id="delai_livraison" placeholder="Entrer un Délai de livraison">
                         @error('delai_livraison') <span class="text-danger"> {{ $message }} </span> @enderror
                       </div>
                     </div>
@@ -332,8 +351,8 @@
                                     "hideSearch": true,
                                     "placeholder": "Select category"
                                   }' required>
-                            <option value="0">Commande de produit</option>
-                            <option value="1">Location</option>
+                            <option value="0">Vente de produit</option>
+                            <option value="1">Location de produit</option>
                           </select>
                         </div>
                       </div>

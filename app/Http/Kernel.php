@@ -36,12 +36,15 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-            \App\Http\Middleware\AdminMiddleware::class,
-            \App\Http\Middleware\RessourceHumaineMiddleware::class,
-            \App\Http\Middleware\ComptableMiddleware::class,
             \App\Http\Middleware\CommercialMiddleware::class,
-            \App\Http\Middleware\MagasinierMiddleware::class,
-            \App\Http\Middleware\LogistiqueMiddleware::class,
+            // \App\Http\Middleware\ComptableMiddleware::class,
+            // \App\Http\Middleware\AdminMiddleware::class,
+            // \App\Http\Middleware\RessourceHumaineMiddleware::class,
+            // \App\Http\Middleware\MagasinierMiddleware::class,
+            // \App\Http\Middleware\LogistiqueMiddleware::class,
+            // \App\Http\Middleware\PackautoMiddleware::class,
+            // \App\Http\Middleware\SecretaireMiddleware::class,
+            // \App\Http\Middleware\GeststockMiddleware::class,
         ],
 
         'api' => [
@@ -70,5 +73,6 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        // 'admin.ou.magasinier' => \App\Http\Middleware\AdminOrMagasinier::class,
     ];
 }

@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers\Commercial;
 
+use Carbon\Carbon;
+use App\Models\Client;
 use App\Models\Commercial;
+use App\Models\Clientdevis;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -15,7 +19,10 @@ class CommercialController extends Controller
     
     public function index()
     {
-        $Rcommercial = PageAccessibleCommercial() ;
+        if(!PageAccessibleCommercial()) 
+        {
+            return redirect()->route('commercial.home')->with('error',"Désolé! vous n'êtes pas un responsable commercial pour effectuer cette opération");
+        } 
 
         $commercials = Commercial::orderBy('updated_at','desc')->get()->except(auth()->user()->id);
         return view('dashboard.commercial.commercial.all-commercial', compact('commercials'));
@@ -23,20 +30,28 @@ class CommercialController extends Controller
 
     public function create()
     {
-        $Rcommercial = PageAccessibleCommercial() ;
+        if(!PageAccessibleCommercial()) 
+        {
+            return redirect()->route('commercial.home')->with('error',"Désolé! vous n'êtes pas un responsable commercial pour effectuer cette opération");
+        } 
 
         return view('dashboard.commercial.commercial.add-commercial');
     }
 
     public function store(Request $request)
     {
-        $Rcommercial = PageAccessibleCommercial() ;
+        if(!PageAccessibleCommercial()) 
+        {
+            return redirect()->route('commercial.home')->with('error',"Désolé! vous n'êtes pas un responsable commercial pour effectuer cette opération");
+        } 
 
+        // dd($request->contact);
         $request->validate([
             'nom' => 'required|min:2',
             'prenom' => 'required|min:2',
             'contact' => 'required|unique:commercials|min:8|max:12',
             'email' => 'required|email|unique:commercials|min:8',
+            'premise' => 'required|min:1',
             'identifiant'   => 'required|unique:commercials|min:3',
             'password'   => 'required|unique:commercials|min:6',
         ]);
@@ -55,9 +70,11 @@ class CommercialController extends Controller
             'prenom' => $request->prenom,
             'contact' => $request->contact ,
             'email' => $request->email ,
+            'premise' => $request->premise ,
             'isvalide' => 1,
             'photo' => $photo,
             'role' => 0,
+            'statut' => 0,
             'identifiant' => $request->identifiant,
             'password' => Hash::make($request->password),
         ]);
@@ -69,16 +86,27 @@ class CommercialController extends Controller
         return redirect()->route('commercial.commercial.index')->with('success', "$noms ajouté avec succès");
     }
 
+    public function show (Commercial $commercial)  
+    {
+        //
+    }
+
     public function edit (Commercial $commercial)  
     {
-        $Rcommercial = PageAccessibleCommercial() ;
+        if(!PageAccessibleCommercial()) 
+        {
+            return redirect()->route('commercial.home')->with('error',"Désolé! vous n'êtes pas un responsable commercial pour effectuer cette opération");
+        } 
 
         return view('dashboard.commercial.commercial.edit-commercial', compact('commercial'));
     }
 
     public function update(Request $request, Commercial $commercial)
     {
-        $Rcommercial = PageAccessibleCommercial() ;
+        if(!PageAccessibleCommercial()) 
+        {
+            return redirect()->route('commercial.home')->with('error',"Désolé! vous n'êtes pas un responsable commercial pour effectuer cette opération");
+        } 
 
         // Validation
         $request->validate([
@@ -86,6 +114,7 @@ class CommercialController extends Controller
             'prenom' => 'required|min:2',
             'contact'   => 'required|unique:commercials,contact,' . $commercial->id . '|min:8|max:12',
             'email'   => 'required|email|unique:commercials,email,' . $commercial->id . '|min:8',
+            'premise' => 'required|min:1',
             'identifiant'   => 'required|unique:commercials,identifiant,' . $commercial->id . '|min:3',
         ]);
 
@@ -117,6 +146,7 @@ class CommercialController extends Controller
             'prenom' => $request->prenom,
             'contact' => $request->contact ,
             'email' => $request->email ,
+            'premise' => $request->premise ,
             'photo' => $photo,
             'identifiant' => $request->identifiant,
             'password' => $password,
@@ -127,7 +157,10 @@ class CommercialController extends Controller
 
     public function destroy(Commercial $commercial)
     {
-        $Rcommercial = PageAccessibleCommercial() ;
+        if(!PageAccessibleCommercial()) 
+        {
+            return redirect()->route('commercial.home')->with('error',"Désolé! vous n'êtes pas un responsable commercial pour effectuer cette opération");
+        } 
 
         //données
             $noms = "$commercial->nom $commercial->prenom" ;
@@ -154,4 +187,87 @@ class CommercialController extends Controller
         // $commercial->delete();
         // return back()->with('success', "$noms supprimé avec succès");
     }
+
+    
+    //statistique
+        public function commercialStatistique(Commercial $commercial)
+        {
+            $clients = Client::orderBy('updated_at','desc')->get();
+            $CA = 0;
+            $MT = 0;
+
+            $AuthClients = $commercial->clients()->orderBy('updated_at','desc')->get();
+
+            $clientdevis = $commercial->clientdevis()->orderBy('updated_at','desc')->get();
+
+            foreach($clientdevis as $ChiffreAffaire)
+            {
+                $CA += $ChiffreAffaire->versement ;
+                $MT += $ChiffreAffaire->total_payer ;
+            }
+
+            return  view('dashboard.commercial.commercial.statistique.statistique', 
+                    compact('clients','clientdevis','AuthClients','CA','MT','commercial'));
+        }
+        public function commercialStatistiqueAnnee(Request $request, Commercial $commercial)
+        {
+            $startYear = 2024;
+            $currentYear = now()->year;
+            $selectedYear = $request->input('year', $currentYear);
+
+            // Récupération par mois
+            $devisData = Clientdevis::whereHas('clientdevisinfo', function ($query) {
+                            $query->where('isvalide', 1);
+                        })
+                        ->select(
+                            DB::raw('YEAR(created_at) as year'),
+                            DB::raw('MONTH(created_at) as month'),
+                            DB::raw('COUNT(*) as total')
+                        )
+                        ->where('commercial_id', $commercial->id)
+                        ->whereYear('created_at', $selectedYear)
+                        ->groupBy('year', 'month')
+                        ->orderBy('month')
+                        ->get();
+
+            // Structure pour le graphe
+            $chartData = [];
+            foreach (range(1, 12) as $m) {
+                $monthName = Carbon::create()->month($m)->format('F');
+                $chartData[$monthName] = 0;
+            }
+            foreach ($devisData as $row) {
+                $monthName = Carbon::create()->month($row->month)->format('F');
+                $chartData[$monthName] = $row->total;
+            }
+
+            return view('dashboard.commercial.commercial.statistique.statistique-annee', [
+                'startYear'   => $startYear,
+                'currentYear' => $currentYear,
+                'selectedYear'=> $selectedYear,
+                'chartData'   => $chartData,
+                'commercial'   => $commercial
+            ]);
+        }
+        public function commercialStatistiqueMois(Commercial $commercial, $year, $month)
+        {
+            $clientdevis = Clientdevis::where('commercial_id', $commercial->id)
+                        ->whereHas('clientdevisinfo', function ($query) {
+                            $query->where('isvalide', 1);
+                        })
+                ->whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)
+                ->get();
+
+            $monthName = Carbon::create()->month($month)->translatedFormat('F');
+
+            return view('dashboard.commercial.commercial.statistique.statistique-mois', [
+                'clientdevis' => $clientdevis,
+                'year'  => $year,
+                'month' => $month,
+                'monthName' => $monthName,
+                'commercial'   => $commercial
+            ]);
+        }
+    //
 }

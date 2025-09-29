@@ -15,11 +15,16 @@ return new class extends Migration
             $table->id();
             $table->string('nom');
             $table->string('contact')->unique();
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->string('adresse_postale');
-            $table->string('Pachat');
+            $table->string('reference')->unique();
+            $table->string('Pachat')->nullable();
+            $table->string('NCC')->nullable();
             $table->boolean("TC")->default();
-            $table->foreignId('commercial_id')->constrained()->onDelete('cascade');
+            $table->boolean('PachatStatut')->default(0);
+            $table->boolean('isvalide')->default(1);
+            $table->boolean('etat')->default(0);
+            $table->foreignId('commercial_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -28,6 +28,7 @@
             <hr>
 
             <h5 class="modal-title mb-3">Remise si neccessaire (facultatif)</h5>
+            @if(!auth()->user()->role)<h6 class="modal-title mb-3">Plafond remise : {{ auth()->user()->premise }}</h6>@endif
             <div class="row mb-4">
               <div class="col-sm-3 mb-2 mb-sm-0">
                 <div class="d-flex align-items-center mt-2">
@@ -38,18 +39,6 @@
                 <label for="prenom" class="visually-hidden form-label">Remise en % (facultatif)</label>
                 <input type="number" name="remise" value="{{ old('remise') }}" id="nom" min="1" max="99" class="form-control" placeholder="Remise sur le produit">
                 @error('remise') <span class="text-danger">{{ $message }}</span> @enderror
-              </div>
-            </div>
-            <div class="row mb-4">
-              <div class="col-sm-3 mb-2 mb-sm-0">
-                <div class="d-flex align-items-center mt-2">
-                  <div class="flex-grow-1">Motif</div>
-                </div>
-              </div>
-              <div class="col-sm">
-                <label for="motif" class="visually-hidden form-label">Motif (facultatif)</label>
-                <textarea name="motif" id="motif" value="{{ old('remise') }}" class="form-control" placeholder="Motif de la remise"></textarea>
-                @error('motif') <span class="text-danger">{{ $message }}</span> @enderror
               </div>
             </div>
           </div>

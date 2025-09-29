@@ -22,7 +22,7 @@
                   <form method="post" action="{{ $url }}" class="signin-form">
 							    @csrf
                     <div class="mb-3">
-                      <input type="text" name="identifiant" placeholder="Identifiant" aria-label="Email" class="form-control form-control-lg @error('identifiant') is-invalid @enderror" value="{{ old('identifiant') }}" required autocomplete="email" autofocus>
+                      <input type="text" name="identifiant" placeholder="Identifiant" aria-label="Identifiant" class="form-control form-control-lg @error('identifiant') is-invalid @enderror" value="{{ old('identifiant') }}" required >
                       @error('identifiant')<span class="text-danger"> {{ $message }} </span>@enderror
                     </div>
                     <div class="mb-3">
